@@ -24,6 +24,12 @@
   --color-clinic-green: #053b32; /* Aapka green shade */
   --color-clinic-yellow: #dfff4f; /* Aapka yellow shade */
   --color-clinic-text: #E5E7EB;
+  --color-clinic-mint: #E6F4F1;
+  --color-clinic-teal: #0F766E;
 }
-
+.swiper,
+.swiper-wrapper,
+.swiper-slide {
+  background-color: white !important;
+}
 
