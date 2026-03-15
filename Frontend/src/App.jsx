@@ -3,6 +3,7 @@ import Navbar from "./components/Header/Navbar";
 import HeroSection from "./components/Header/HeroSection";
 import BodyPage from "./components/Pages/BodyPage";
 import PlanPage from "./components/Pages/PlanPage";
+import ServicePage from "./components/Pages/ServicePage";
 
 const App = () => {
   return (
@@ -13,6 +14,9 @@ const App = () => {
         <BodyPage />
       </div>
       <PlanPage/>
+      <div>
+        <ServicePage/>
+      </div>
     </div>
   );
 };
