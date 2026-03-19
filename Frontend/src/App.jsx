@@ -8,6 +8,7 @@ import TeamPage from "./components/Pages/TeamPage";
 import ReviewPage from "./components/Pages/ReviewPage";
 import FAQPage from "./components/Pages/FAQPage";
 import StatsSection from "./components/Pages/StatsSection";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <TeamPage/>
         <ReviewPage/>
         <FAQPage/>
+        <Footer/>
       </div>
     </div>
   );
