@@ -155,7 +155,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Activity, Menu, X, ArrowRight, User } from 'lucide-react';
+import { Activity, Menu, X, ArrowRight, User, LogOut } from 'lucide-react';
 
 import { openAuthModal } from '../../Redux/Features/ui/uiSlice';
 import { logout } from '../../Redux/Features/authentication/authSlice';
