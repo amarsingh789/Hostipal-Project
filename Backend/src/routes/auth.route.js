@@ -8,5 +8,7 @@ router.get('/user', authController.userData)
 
 router.get('/refresh-token', authController.refreshToken)
 
+router.get('/logout', authController.logout)
+
 export default router
 
