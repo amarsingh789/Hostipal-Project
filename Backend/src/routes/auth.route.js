@@ -4,11 +4,14 @@ import * as authController from '../controllers/auth.controllers.js'
 const router = express.Router()
 
 router.post('/register', authController.register)
+router.post('/login', authController.login)
 router.get('/user', authController.userData)
 
 router.get('/refresh-token', authController.refreshToken)
 
 router.get('/logout', authController.logout)
+
+router.get('/logout-all', authController.logoutAll)
 
 export default router
 
