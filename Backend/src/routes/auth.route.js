@@ -13,5 +13,9 @@ router.get('/logout', authController.logout)
 
 router.get('/logout-all', authController.logoutAll)
 
+// OTP Base authentication
+// router.post('/send-otp', authController.sendOtp)
+// router.post('/verify-otp', authController.verifyOtp)
+
 export default router
 

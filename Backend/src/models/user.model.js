@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     },
     mobileNumber: {
         type: String,
-        unique: [true, "Email must be unique"],
+        unique: true,
         sparse: true,
         trim: true,
         match: [/^[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian mobile number']
@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
+        required: function(){
+            return this.mobileNumber == null
+        },
         minLength: [6, 'Password must be at least 6 characters'],
         select: false
     },
