@@ -8,6 +8,7 @@ import {FreeMode, Autoplay, Pagination} from "swiper/modules"
 import 'swiper/css'
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination'
+import { Link } from "react-router-dom";
 
 const TeamPage = () => {
   const doctors = [
@@ -122,10 +123,10 @@ const TeamPage = () => {
                   </div>
                   <h3 className="text-3xl font-bold text-white mb-6 font-poppins">{doctor.name}</h3>
 
-                  <button className="flex items-center justify-between w-full bg-clinic-green text-white border border-white/20 px-6 py-4 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-clinic-yellow hover:text-clinic-green font-bold">
+                  <Link to='appointment' className="flex items-center justify-between w-full bg-clinic-green text-white border border-white/20 px-6 py-4 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-clinic-yellow hover:text-clinic-green font-bold">
                     <span>Book Session</span>
                     <ArrowUpRight size={20} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </SwiperSlide>

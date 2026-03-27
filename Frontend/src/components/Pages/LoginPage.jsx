@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"; // Navigation added
 import toast from "react-hot-toast"; // Toast added
+import { loginStart, loginSuccess, loginFailure } from "@/Redux/Features/authentication/authSlice";
 import {
   Form,
   FormControl,
@@ -30,6 +32,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   // 2. React Hook Form Setup
   const form = useForm({
@@ -54,6 +57,11 @@ const LoginPage = () => {
       
       console.log("Login Success:", res.data);
       
+      localStorage.setItem("ziva_token", res.data.accessToken)
+      dispatch(loginSuccess({
+        user: res.data.user,
+        token: res.data.accessToken
+      }))
       // Success Toast
       toast.success("Login Successful! Welcome back.");
       
@@ -67,6 +75,7 @@ const LoginPage = () => {
       
       const errorMessage = error.response?.data?.message || "Login failed. Please check your credentials.";
       
+      dispatch(loginFailure(errorMessage))
       // Error Toast
       toast.error(errorMessage);
       

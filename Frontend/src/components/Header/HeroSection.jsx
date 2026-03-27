@@ -1,6 +1,7 @@
 import React from 'react'
 import { Stethoscope, User, ArrowUpRight, Award } from 'lucide-react'
 import doctorImg from '../../assets/doctor.webp';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
@@ -65,12 +66,15 @@ const HeroSection = () => {
         </p>
 
         <div className="flex items-center gap-3 pointer-events-auto">
-          <button className="bg-clinic-yellow hover:bg-white text-clinic-green font-poppins font-bold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg active:scale-95">
+          {/* <button className="bg-clinic-yellow hover:bg-white text-clinic-green font-poppins font-bold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg active:scale-95">
             Book Consultation
-          </button>
-          <button className="w-14 h-14 flex items-center justify-center bg-white/10 hover:bg-clinic-yellow text-white hover:text-clinic-green rounded-2xl border border-white/10 transition-all duration-300 backdrop-blur-md">
+          </button> */}
+          <Link to='/appointment' className='bg-clinic-yellow hover:bg-white text-clinic-green font-poppins font-bold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg active:scale-95'>
+            Book Consultation
+          </Link>
+          <Link to='/appointment' className="w-14 h-14 flex items-center justify-center bg-white/10 hover:bg-clinic-yellow text-white hover:text-clinic-green rounded-2xl border border-white/10 transition-all duration-300 backdrop-blur-md">
             <ArrowUpRight size={24} />
-          </button>
+          </Link>
         </div>
       </div>
     </div>

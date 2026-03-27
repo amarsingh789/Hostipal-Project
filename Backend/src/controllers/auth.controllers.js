@@ -136,24 +136,59 @@ export async function login(req, res){
 }
 
 export async function userData(req, res){
-    const token = req.headers.authorization?.split(" ")[1];
-    if(!token){
-        return res.status(401).json({
-            message: 'token not found'
-        })
-    }
+    // const token = req.headers.authorization?.split(" ")[1];
+    // if(!token){
+    //     return res.status(401).json({
+    //         message: 'token not found'
+    //     })
+    // }
 
-    const decoded = jwt.verify(token, config.JWT_SECRET);
-    const user = await userModel.findById(decoded.id)
+    // const decoded = jwt.verify(token, config.JWT_SECRET);
+    // const user = await userModel.findById(decoded.id)
 
-    res.status(200).json({
-        message: 'User Fetch Successfully',
-        user: {
-            name: user.name,
-            email: user.email,
-            mobileNumber: user.mobileNumber
+    // res.status(200).json({
+    //     message: 'User Fetch Successfully',
+    //     user: {
+    //         name: user.name,
+    //         email: user.email,
+    //         mobileNumber: user.mobileNumber
+    //     }
+    // })
+    try{
+        const authHeader = req.headers.authorization
+        if(!authHeader || !authHeader.startsWith("Bearer")){
+            return res.status(401).json({ message: 'Authorization header missing' });
         }
-    })
+
+        const token = authHeader.split(" ")[1];
+        if (!token || token === "undefined" || token === "null") {
+            return res.status(401).json({ message: 'Token is invalid or empty' });
+        }
+
+        const decoded = jwt.verify(token, config.JWT_SECRET);
+        const user = await userModel.findById(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            message: 'User Fetched Successfully',
+            user: {
+                name: user.name,
+                email: user.email,
+                mobileNumber: user.mobileNumber
+            }
+        });
+    }catch(err){
+        console.error("JWT Error in userData:", err.message);
+
+        if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Access token invalid or expired' });
+        }
+
+        res.status(500).json({ message: 'Internal server error' });
+    }
 }
 
 export async function refreshToken(req, res){
