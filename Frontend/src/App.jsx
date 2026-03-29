@@ -22,6 +22,7 @@ import {
 } from "./Redux/Features/authentication/authSlice";
 import { useDispatch } from "react-redux";
 import PatientDashboard from "./components/Pages/PatientDashboard";
+import UserPage from "./components/Pages/UserPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -121,6 +122,16 @@ const App = () => {
             <div>
               <Navbar />
               <PatientDashboard />
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <div>
+              <Navbar />
+              <UserPage />
               <Footer />
             </div>
           }
