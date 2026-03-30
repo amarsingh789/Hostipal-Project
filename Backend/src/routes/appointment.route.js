@@ -9,4 +9,8 @@ router.post('/bookAppointment',verifyToken, appointmentRoute.bookAppointment)
 
 router.get('/getAppointments', verifyToken, appointmentRoute.getAppointments)
 
+router.put('/cancel/:id', verifyToken, appointmentRoute.cancelAppointment);
+
+router.put('/reschedule/:id', verifyToken, appointmentRoute.rescheduleAppointment);
+
 export default router
