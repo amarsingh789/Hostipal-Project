@@ -29,9 +29,7 @@ const signupSchema = z.object({
     .regex(
       /^[6-9]\d{9}$/,
       "Please enter a valid 10-digit Indian mobile number.",
-    )
-    .optional()
-    .or(z.literal("")),
+    ),
   email: z
     .string()
     .min(1, "Email is required.")
@@ -70,15 +68,15 @@ const SignupPage = () => {
     //   setLoading(false);
     // }
 
-    const dataToSend = { ...values };
-    if (dataToSend.mobileNumber === "") {
-      delete dataToSend.mobileNumber; 
-    }
+    // const dataToSend = { ...values };
+    // if (dataToSend.mobileNumber === "") {
+    //   delete dataToSend.mobileNumber; 
+    // }
 
-    console.log("Submitting Signup:", dataToSend);
+    console.log("Submitting Signup:", values);
     
     try {
-      const res = await axios.post('http://localhost:5000/api/register', dataToSend);
+      const res = await axios.post('http://localhost:5000/api/register', values);
       console.log("Signup Success:", res.data);
       
       // 🚀 SUCCESS TOAST
@@ -170,7 +168,7 @@ const SignupPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-700 font-medium">
-                        Full Name
+                        Full Name <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -194,7 +192,7 @@ const SignupPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-700 font-medium">
-                        Email Address
+                        Email Address <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -220,7 +218,7 @@ const SignupPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-700 font-medium">
-                        Mobile No. (Optional)
+                        Mobile No <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -244,7 +242,7 @@ const SignupPage = () => {
                   name="password"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">Password</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium">Password <span className="text-red-500">*</span></FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input

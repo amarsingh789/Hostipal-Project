@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true,
         trim: true,
-        match: [/^[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian mobile number']
+        match: [/^[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian mobile number'],
+        required: [true, 'Enter your mobile number'],
     },
     email: {
         type: String,

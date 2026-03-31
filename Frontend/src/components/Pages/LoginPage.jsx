@@ -68,7 +68,7 @@ const LoginPage = () => {
       // TODO: Redux mein token save karein (Next step)
       
       // Redirect to Dashboard or Home
-      setTimeout(() => navigate("/"), 1500); 
+      setTimeout(() => navigate("/dashboard"), 1500); 
 
     } catch (error) {
       console.error("Login Error:", error);
