@@ -689,7 +689,7 @@ const PatientDashboard = () => {
             <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6 sm:p-8 overflow-hidden">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold font-poppins text-[#021814]">Top Doctors</h3>
-                <Link to="/team" className="text-[#0F766E] text-xs font-bold hover:underline">View All</Link>
+                <Link to="/doctor" className="text-[#0F766E] text-xs font-bold hover:underline">View All</Link>
               </div>
               <Swiper slidesPerView={1} spaceBetween={16} autoplay={{ delay: 3000, disableOnInteraction: false }} modules={[Autoplay]} className="w-full">
                 {MOCK_TEAM.map((doc) => (

@@ -23,6 +23,7 @@ import {
 import { useDispatch } from "react-redux";
 import PatientDashboard from "./components/Pages/PatientDashboard";
 import UserPage from "./components/Pages/UserPage";
+import DoctorPage from "./components/Pages/DoctorPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -136,6 +137,13 @@ const App = () => {
             </div>
           }
         />
+        <Route path="/doctor" element={
+          <div>
+            <Navbar />
+            <DoctorPage/>
+            <Footer/>
+          </div>
+        }/>
       </Routes>
     </div>
   );
