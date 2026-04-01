@@ -102,10 +102,10 @@ const SignupPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#E6F4F1] via-gray-50 to-[#E6F4F1] flex items-center justify-center p-4 sm:p-8">
-      <div className="flex flex-col md:flex-row-reverse bg-white rounded-[2.5rem] shadow-2xl overflow-hidden max-w-6xl w-full min-h-[650px] border border-white/50 bg-opacity-90 backdrop-blur-xl">
+    <div className="min-h-screen bg-gradient-to-br from-[#E6F4F1] via-gray-50 to-[#E6F4F1] flex items-center justify-center p-4 sm:p-6 lg:p-8 py-10">
+      <div className="flex flex-col md:flex-row-reverse bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden max-w-6xl w-full min-h-[650px] border border-white/50 bg-opacity-90 backdrop-blur-xl">
         {/* Right Side */}
-        <div className="hidden md:flex flex-col justify-between p-12 bg-[#053b32] text-[#E5E7EB] w-1/2 relative overflow-hidden">
+        <div className="hidden md:flex flex-col justify-between p-8 lg:p-12 bg-[#053b32] text-[#E5E7EB] md:w-1/2 relative overflow-hidden">
           <div className="absolute inset-0 opacity-5">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -118,20 +118,20 @@ const SignupPage = () => {
             </svg>
           </div>
           <div className="relative z-10">
-            <h2 className="text-2xl font-bold tracking-tight mb-16 flex items-center gap-2 text-[#dfff4f]">
+            <h2 className="text-xl lg:text-2xl font-bold tracking-tight mb-8 lg:mb-16 flex items-center gap-2 text-[#dfff4f]">
               Ziva Healthcare
             </h2>
           </div>
-          <div className="relative z-10 mb-11">
-            <h1 className="text-5xl font-extrabold leading-tight mb-6 text-white">
-              Start Your Health <br /> Journey Today
+          <div className="relative z-10 mb-8 lg:mb-11">
+            <h1 className="text-3xl lg:text-5xl font-extrabold leading-tight mb-4 lg:mb-6 text-white">
+              Start Your Health <br className="hidden lg:block"/> Journey Today
             </h1>
-            <p className="text-gray-300 text-lg max-w-md">
+            <p className="text-gray-300 text-sm lg:text-lg max-w-md">
               Join thousands of patients managing their health records and
               consulting top doctors effortlessly.
             </p>
           </div>
-          <div className="relative z-10 flex space-x-6 text-sm text-gray-400">
+          <div className="relative z-10 flex space-x-4 lg:space-x-6 text-xs lg:text-sm text-gray-400">
             <Link to="#" className="hover:text-[#dfff4f] transition">
               Terms
             </Link>
@@ -144,12 +144,15 @@ const SignupPage = () => {
           </div>
         </div>
         {/* Left Side */}
-        <div className="w-full md:w-1/2 sm:p-12 lg:p-14 flex flex-col justify-center bg-white relative">
+        <div className="w-full md:w-1/2 p-6 sm:p-10 lg:p-14 flex flex-col justify-center bg-white relative">
+          <div className="md:hidden mb-6">
+            <h2 className="text-[#0F766E] font-bold text-xl">Ziva Healthcare</h2>
+          </div>
           <div className="max-w-md w-full mx-auto">
-            <h2 className="text-3xl font-bold text-[#053b32] mb-2 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#053b32] mb-1 tracking-tight">
               Create Account
             </h2>
-            <p className="text-gray-500 mb-6">
+            <p className="text-sm md:text-base text-gray-500 mb-8">
               Fill in your details to get started.
             </p>
 
@@ -167,7 +170,7 @@ const SignupPage = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-gray-700 font-medium text-sm">
                         Full Name <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
@@ -191,7 +194,7 @@ const SignupPage = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-gray-700 font-medium text-sm">
                         Email Address <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
@@ -217,7 +220,7 @@ const SignupPage = () => {
                   name="mobileNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-gray-700 font-medium text-sm">
                         Mobile No <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
@@ -242,7 +245,7 @@ const SignupPage = () => {
                   name="password"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">Password <span className="text-red-500">*</span></FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-sm">Password <span className="text-red-500">*</span></FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input

@@ -135,11 +135,14 @@ const LoginPage = () => {
 
         {/* ================= RIGHT SIDE (Form) ================= */}
         <div className="w-full md:w-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-center bg-white relative">
+          <div className="md:hidden mb-6">
+            <h2 className="text-[#0F766E] font-bold text-xl">Ziva Healthcare</h2>
+          </div>
           <div className="max-w-md w-full mx-auto">
-            <h2 className="text-3xl font-bold text-[#053b32] mb-2 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#053b32] mb-1 tracking-tight">
               Sign In
             </h2>
-            <p className="text-gray-500 mb-8">Access your health account.</p>
+            <p className="text-sm md:text-base text-gray-500 mb-8">Access your health account.</p>
 
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -150,7 +153,7 @@ const LoginPage = () => {
                   name="loginId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-gray-700 font-medium text-sm">
                        Email, or Mobile No.
                       </FormLabel>
                       <FormControl>
@@ -181,7 +184,7 @@ const LoginPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex items-center justify-between mb-2">
-                        <FormLabel className="text-gray-700 font-medium pb-0">
+                        <FormLabel className="text-gray-700 font-medium pb-0 text-sm">
                           Password
                         </FormLabel>
                         <Link to="#" className="text-sm text-[#0F766E] hover:underline">

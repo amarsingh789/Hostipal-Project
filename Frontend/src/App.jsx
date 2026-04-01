@@ -15,12 +15,13 @@ import SignupPage from "./components/Pages/SignupPage";
 import { Toaster } from "react-hot-toast";
 import BookDoctor from "./components/Pages/BookDoctor";
 import { Loader2 } from "lucide-react";
-import axios from "axios";
+import api from "./utils/axiosInstance";
 import {
   loginSuccess,
   logout,
 } from "./Redux/Features/authentication/authSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ProtectedRoute from "./components/Pages/ProtectedRoute";
 import PatientDashboard from "./components/Pages/PatientDashboard";
 import UserPage from "./components/Pages/UserPage";
 import DoctorPage from "./components/Pages/DoctorPage";
@@ -35,16 +36,15 @@ const App = () => {
 
       if (!savedToken) {
         setIsCheckingAuth(false);
-        return; // Agar access token nahi hai, toh check mat karo. User needs to login.
+        return; 
       }
 
       try {
-        // Backend ko Header mein token bhej kar verify karo
-        const res = await axios.get("http://localhost:5000/api/user", {
+        const res = await api.get("http://localhost:5000/api/user", {
           headers: {
             Authorization: `Bearer ${savedToken}`,
           },
-          withCredentials: true, // Yeh ensure karega ki cookie (refreshToken) bhi jaaye agar needed ho future me
+          withCredentials: true, 
         });
 
         if (res.data && res.data.user) {
@@ -110,31 +110,31 @@ const App = () => {
         <Route
           path="/appointment"
           element={
-            <div>
+            <ProtectedRoute>
               <Navbar />
               <BookDoctor />
               <Footer />
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard"
           element={
-            <div>
+            <ProtectedRoute>
               <Navbar />
               <PatientDashboard />
               <Footer />
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            <div>
+            <ProtectedRoute>
               <Navbar />
               <UserPage />
               <Footer />
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route path="/doctor" element={
