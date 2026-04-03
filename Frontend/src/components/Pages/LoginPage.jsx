@@ -24,7 +24,7 @@ import { Eye, EyeOff, Loader2, User } from "lucide-react";
 // 1. Zod Schema - Validation
 // ==========================================
 const formSchema = z.object({
-  loginId: z.string().min(3, "Email, or Mobile No. is required."),
+  email: z.string().min(3, "Email, or Mobile No. is required."),
   password: z.string().min(1, "Password is required."),
 });
 
@@ -38,7 +38,7 @@ const LoginPage = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      loginId: "",
+      email: "",
       password: "",
     },
   });
@@ -150,7 +150,7 @@ const LoginPage = () => {
                 {/* Unified Input */}
                 <FormField
                   control={form.control}
-                  name="loginId"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-700 font-medium text-sm">

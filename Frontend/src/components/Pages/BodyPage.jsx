@@ -79,7 +79,7 @@ const StartChip = ({ label }) => (
 const ServiceCard = ({ item }) => (
   // ... aapka code
   <div
-    className={`relative h-[360px] rounded-[2.5rem] p-8 flex flex-col justify-between overflow-hidden ${item.bg} group cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500`}
+    className={`relative h-[360px] rounded-[2.5rem] p-8 flex flex-col justify-between overflow-hidden ${item.bg} group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500`}
   >
     <span className="absolute -top-4 -right-2 text-[100px] font-black text-white/5 leading-none   transition-all duration-700 pointer-events-none select-none group-hover:scale-110 group-hover:-rotate-12 group-hover:text-white/10">
       {item.num}
@@ -112,7 +112,7 @@ const ServiceCard = ({ item }) => (
 
 const TestimonialCard = ({ item }) => (
   // ... aapka code
-  <div className="relative h-[360px] rounded-[2.5rem] p-8 flex flex-col justify-between bg-white border border-gray-100 shadow-xl overflow-hidden">
+  <div className="relative h-[360px] rounded-[2.5rem] p-8 flex flex-col justify-between bg-white border border-gray-100 shadow-lg overflow-hidden">
     <div
       className="absolute inset-0 opacity-40 pointer-events-none"
       style={{

@@ -76,9 +76,12 @@ const session = await sessionModel.create({
 export async function login(req, res){
     const {email, password, mobileNumber} = req.body
 
+    // const user = await userModel.findOne({
+    //     $or: [{email}, {mobileNumber}]
+    // }).select('+password')
     const user = await userModel.findOne({
-        $or: [{email}, {mobileNumber}]
-    }).select('+password')
+        email: { $regex: new RegExp(`^${email.trim()}$`, 'i') }
+    }).select('+password');
     if(!user){
         return res.status(401).json({
             message: "Invalid username or password"
