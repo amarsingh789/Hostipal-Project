@@ -241,7 +241,7 @@ const FAQPage = () => {
   };
 
   return (
-    <div className='relative w-full py-32 px-6 lg:px-12 bg-[#f8fafc] font-inter overflow-hidden'>
+    <div className='relative w-full py-32 px-6 lg:px-12 bg-[#f8fafc] font-inter overflow-hidden' id='faq'>
       
       {/* 2-Column Layout */}
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24">
