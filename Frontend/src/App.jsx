@@ -25,6 +25,7 @@ import ProtectedRoute from "./components/Pages/ProtectedRoute";
 import PatientDashboard from "./components/Pages/PatientDashboard";
 import UserPage from "./components/Pages/UserPage";
 import DoctorPage from "./components/Pages/DoctorPage";
+import AboutPage from "./components/Pages/AboutPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -141,6 +142,13 @@ const App = () => {
           <div>
             <Navbar />
             <DoctorPage/>
+            <Footer/>
+          </div>
+        }/>
+        <Route path="/about" element={
+          <div>
+            <Navbar />
+            <AboutPage/>
             <Footer/>
           </div>
         }/>

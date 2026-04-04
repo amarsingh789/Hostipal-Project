@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion"; // 🚀 Added Framer Motion
 
 import {
   User, Mail, Phone, MapPin, Calendar, Activity,
@@ -66,11 +67,13 @@ const UserPage = () => {
   React.useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
+  
   // State for all editable fields
   const [formData, setFormData] = useState({
     name: "Amar Singh",
-    gender: "Male", // Set default to see the active styling
+    gender: "Male",
     address: "",
     bloodGroup: "B+",
     height: "175",
@@ -103,6 +106,28 @@ const UserPage = () => {
 
   const initials = formData.name ? formData.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2) : "A";
 
+  // Premium Animation Variants
+
+  const customEase = [0.22, 1, 0.36, 1];
+
+  const fadeDown = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: customEase } }
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: customEase } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    }
+  };
+
   return (
     <TooltipProvider>
       <div className="zp">
@@ -117,12 +142,12 @@ const UserPage = () => {
             --ink:#1a1208; --inks:#5a5248; --inkm:#8a8078;
             --wh:#ffffff; --bd:#e4ddd4; --bdl:#ede9e2;
             --rf:'Fraunces',serif; --sf:'DM Sans',sans-serif;
-            --rc:24px;  /* Slightly sharper card corners */
-            --ri:12px;  /* Sharper inputs/buttons */
+            --rc:24px;  
+            --ri:12px;  
           }
 
           /* Responsive Page */
-          .zp { min-height:100vh; background:var(--cr); font-family:var(--sf); padding:112px 16px 80px; }
+          .zp { min-height:100vh; background:var(--cr); font-family:var(--sf); padding:112px 16px 80px; overflow-x: hidden; }
           @media (min-width: 640px) { .zp { padding-left:24px; padding-right:24px; } }
 
           /* Hero */
@@ -259,7 +284,7 @@ const UserPage = () => {
           .zfi:disabled { background:var(--crm); opacity:.65; cursor:not-allowed; border-color:transparent;}
           input[type=number].zfi::-webkit-inner-spin-button { display:none; }
 
-          /* 🚀 REFINED SELECT 🚀 */
+          /* Select */
           button[role="combobox"] { 
             width: 100% !important; height: 44px !important; padding: 0 14px 0 42px !important; 
             border-radius: var(--ri) !important; background: var(--cr) !important; 
@@ -287,15 +312,14 @@ const UserPage = () => {
           .zfph { color:#c8c0b4; }
 
           /* Live name preview card */
-          .np { display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px; background:linear-gradient(135deg,var(--gp),#d4eee6); border:1px solid #c2ddd5; margin-bottom:20px; animation:fadeIn .3s ease; }
-          @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+          .np { display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px; background:linear-gradient(135deg,var(--gp),#d4eee6); border:1px solid #c2ddd5; margin-bottom:20px; }
           .np-av { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,#1a8a60,var(--gd)); display:flex; align-items:center; justify-content:center; font-family:var(--rf); font-size:18px; font-weight:700; color:#fff; flex-shrink:0; }
           .np-name { font-family:var(--rf); font-size:17px; font-weight:700; color:var(--ink); }
           .np-sub { font-size:11px; color:var(--inkm); margin-top:1px; }
           .np-chip { display:inline-flex; align-items:center; gap:4px; background:var(--gm); color:#dfff4f; font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px; margin-left:8px; }
           @media (max-width: 639px) { .np-chip { display: none; } }
 
-          /* 🚀 REFINED GENDER PILLS 🚀 */
+          /* Gender Pills */
           .gpills { display:flex; gap:8px; flex-wrap:wrap; }
           .gp { 
             padding:0 16px; height:44px; border-radius: var(--ri); font-size:13px; font-weight:500; 
@@ -305,20 +329,9 @@ const UserPage = () => {
           }
           @media (max-width: 400px) { .gp { flex: 1; min-width: 45%; } }
           .gp:hover:not(:disabled) { border-color:var(--gm); color:var(--gm); background:var(--gp); }
-          
-          /* Active Selected State */
-          .gp.sel { 
-            background: var(--gm); 
-            border-color: var(--gm); 
-            color: #dfff4f; 
-            font-weight: 700; 
-            box-shadow: 0 4px 12px rgba(15,61,48,0.15);
-          }
-          
-          /* Disabled State */
+          .gp.sel { background: var(--gm); border-color: var(--gm); color: #dfff4f; font-weight: 700; box-shadow: 0 4px 12px rgba(15,61,48,0.15); }
           .gp:disabled { opacity:.65; cursor:not-allowed; border-color:transparent; background:var(--crm); }
           .gp.sel:disabled { background: var(--gm); opacity: 0.8; color: #dfff4f; border-color: transparent;}
-
 
           /* Address counter */
           .ac { display:flex; justify-content:flex-end; margin-top:4px; }
@@ -340,9 +353,8 @@ const UserPage = () => {
           .btp:hover { background:var(--gs); transform:translateY(-1px); }
 
           /* Toast */
-          .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width: 90%; max-width: 320px; background:var(--gm); color:#dfff4f; font-family:var(--sf); font-size:13px; font-weight:600; padding:11px 24px; border-radius:99px; box-shadow:0 6px 24px rgba(15,61,48,.35); display:flex; align-items:center; justify-content: center; gap:8px; z-index:100; animation:toastIn .3s ease; }
+          .toast { position:fixed; bottom:20px; left:50%; width: 90%; max-width: 320px; background:var(--gm); color:#dfff4f; font-family:var(--sf); font-size:13px; font-weight:600; padding:11px 24px; border-radius:99px; box-shadow:0 6px 24px rgba(15,61,48,.35); display:flex; align-items:center; justify-content: center; gap:8px; z-index:100; }
           @media (min-width: 640px) { .toast { bottom:32px; width: auto; justify-content: flex-start; } }
-          @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
 
           /* DayPicker */
           .rdp { --rdp-accent-color:var(--gm); --rdp-background-color:var(--gp); margin:0!important; font-family:var(--sf)!important; }
@@ -357,11 +369,6 @@ const UserPage = () => {
           .rdp-caption_label { font-family:var(--rf)!important; font-size:16px!important; font-weight:700!important; color:var(--ink)!important; }
           .rdp-dropdown { border:1.5px solid var(--bd)!important; border-radius:9px!important; background:var(--wh)!important; font-family:var(--sf)!important; font-size:13px!important; }
 
-          /* Anim */
-          @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-          .fa { animation:fadeUp .4s ease both; }
-          .fa1 { animation-delay:.04s; } .fa2 { animation-delay:.1s; } .fa3 { animation-delay:.16s; }
-
           /* Popover */
           [data-radix-popper-content-wrapper] { z-index: 9999 !important; }
           [data-radix-popper-content-wrapper]>div { background:var(--wh)!important; border:1.5px solid var(--bd)!important; border-radius:20px!important; box-shadow:0 8px 36px rgba(0,0,0,.12)!important; padding:14px!important; width: auto !important; max-width: none !important;}
@@ -371,7 +378,12 @@ const UserPage = () => {
         <div className="zh"><div className="zh-grid" /></div>
 
         <div className="zw">
-          <div className="top-nav fa">
+          
+          {/*  Animated Top Nav */}
+          <motion.div 
+            variants={fadeDown} initial="hidden" animate="visible"
+            className="top-nav"
+          >
             <button onClick={() => navigate(-1)} className="top-nav-btn nav-back">
               <ArrowLeft size={16} />
               {!isMobile && <span>Go Back</span>}
@@ -380,18 +392,20 @@ const UserPage = () => {
               <LayoutDashboard size={16} />
               <span>Dashboard</span>
             </button>
-          </div>
-          {/* Header */}
-          <div className="zhdr fa fa1">
+          </motion.div>
+          
+          {/*  Animated Header */}
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" className="zhdr">
             <p className="zey">Account</p>
             <h1 className="ztitle">My Profile</h1>
             <p className="zsub">Manage your personal details and health data.</p>
-          </div>
+          </motion.div>
 
-          <div className="zbody">
+          {/*  Animated Body Container (Staggered) */}
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="zbody">
 
             {/* ── SIDEBAR ── */}
-            <div className="zsb fa fa2">
+            <motion.div variants={fadeUp} className="zsb">
               <div className="sbc">
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
                   <div className="avsh">
@@ -409,7 +423,7 @@ const UserPage = () => {
                       <TooltipContent className="zf-tip text-black">Change photo</TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="avname">{formData.name || "Your Name"}</p>
+                  <p className="avname !font-inter">{formData.name || "Your Name"}</p>
                   <div className="vbadge"><Shield size={11}/> Verified Patient</div>
                 </div>
 
@@ -444,10 +458,10 @@ const UserPage = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* ── FORMS ── */}
-            <div className="zforms fa fa3">
+            <motion.div variants={fadeUp} className="zforms">
               <div className="fc">
 
                 <div className="fch">
@@ -455,7 +469,7 @@ const UserPage = () => {
                     <div className="fchi" style={{ background:"#e6f2ee" }}>
                       <User size={17} style={{ color:"var(--gm)" }}/>
                     </div>
-                    <span className="fcht">Profile Details</span>
+                    <span className="fcht !font-poppins !font-semibold !text-xl">Profile Details</span>
                   </div>
                   <button className={`bte ${editing?"on":""}`} onClick={()=>setEditing(e=>!e)}>
                     {editing ? <><Check size={12}/> Editing</> : <><Edit2 size={12}/> Edit</>}
@@ -472,19 +486,28 @@ const UserPage = () => {
 
                   <div className="sd"><span>Editable Details</span></div>
 
-                  {/* Live name preview */}
-                  {editing && (
-                    <div className="np">
-                      <div className="np-av">{initials}</div>
-                      <div>
-                        <p className="np-name">
-                          {formData.name || <span style={{ color:"#c8c0b4" }}>Your name…</span>}
-                          <span className="np-chip"><Check size={9}/> Live Preview</span>
-                        </p>
-                        <p className="np-sub">This is how your name appears to doctors</p>
-                      </div>
-                    </div>
-                  )}
+                  {/* 🚀 Animated Live name preview */}
+                  <AnimatePresence>
+                    {editing && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -15, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: "auto", marginBottom: "20px" }}
+                        exit={{ opacity: 0, y: -15, height: 0, marginBottom: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="np"
+                        style={{ overflow: "hidden" }}
+                      >
+                        <div className="np-av">{initials}</div>
+                        <div>
+                          <p className="np-name">
+                            {formData.name || <span style={{ color:"#c8c0b4" }}>Your name…</span>}
+                            <span className="np-chip"><Check size={9}/> Live Preview</span>
+                          </p>
+                          <p className="np-sub">This is how your name appears to doctors</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <div className="fg">
 
@@ -628,36 +651,54 @@ const UserPage = () => {
                     </div>
                   </div>
 
-                  {/* Action bar */}
-                  {editing && (
-                    <div className="ab">
-                      <span className="abl">
-                        <AlertCircle size={13} style={{ color:"#b8ae9f" }}/>
-                        Changes will be saved to your account
-                      </span>
-                      <div className="abr">
-                        <button className="btg" onClick={()=>setEditing(false)}>
-                          <X size={14}/> Discard
-                        </button>
-                        <button className="btp" onClick={handleSave}>
-                          <Save size={14}/> Save Changes
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  {/* 🚀 Animated Action bar */}
+                  <AnimatePresence>
+                    {editing && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: "auto", marginTop: "24px" }}
+                        exit={{ opacity: 0, y: 20, height: 0, marginTop: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="ab"
+                        style={{ overflow: "hidden" }}
+                      >
+                        <span className="abl">
+                          <AlertCircle size={13} style={{ color:"#b8ae9f" }}/>
+                          Changes will be saved to your account
+                        </span>
+                        <div className="abr">
+                          <button className="btg" onClick={()=>setEditing(false)}>
+                            <X size={14}/> Discard
+                          </button>
+                          <button className="btp" onClick={handleSave}>
+                            <Save size={14}/> Save Changes
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
         </div>
 
-        {saved && (
-          <div className="toast">
-            <Check size={15}/> Profile updated successfully
-          </div>
-        )}
+        {/* 🚀 Animated Toast */}
+        <AnimatePresence>
+          {saved && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20, x: "-50%" }}
+              animate={{ opacity: 1, y: 0, x: "-50%" }}
+              exit={{ opacity: 0, y: 20, x: "-50%" }}
+              transition={{ duration: 0.3 }}
+              className="toast"
+            >
+              <Check size={15}/> Profile updated successfully
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </TooltipProvider>

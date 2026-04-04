@@ -54,7 +54,7 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "About", href: "/#about" },
+    { name: "About", href: "/about" },
     { name: "Our Services", href: "/#services" },
     { name: "Doctors", href: "/doctor" },
     { name: "FAQ", href: "/#faq" },
@@ -131,9 +131,7 @@ const Navbar = () => {
       `}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
-        {/* ============================== */}
-        {/* 1. BRAND LOGO                  */}
-        {/* ============================== */}
+        {/* BRAND LOGO */}
         <Link
           to="/"
           className="flex items-center gap-2 text-[#dfff4f] hover:cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -153,9 +151,7 @@ const Navbar = () => {
           </h1>
         </Link>
 
-        {/* ============================== */}
-        {/* 2. DESKTOP NAV LINKS           */}
-        {/* ============================== */}
+        {/* DESKTOP NAV LINKS */}
         <ul className="hidden lg:flex items-center gap-10 text-sm font-medium text-white/80">
           {isAuthenticated ? (
             <div className="flex items-center gap-8">
@@ -258,9 +254,8 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* ============================== */}
-        {/* 4. MOBILE TOGGLE BUTTON        */}
-        {/* ============================== */}
+        
+        {/* MOBILE TOGGLE BUTTON */}
         <motion.button
           variants={navItemVariants}
           whileTap={{ scale: 0.8 }}
@@ -294,9 +289,8 @@ const Navbar = () => {
         </motion.button>
       </div>
 
-      {/* ============================== */}
-      {/* 5. MOBILE MENU DROPDOWN        */}
-      {/* ============================== */}
+      
+      {/* MOBILE MENU DROPDOWN */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
