@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion"; // 🚀 Added Framer Motion
+import { motion, AnimatePresence } from "motion/react"; // Added Framer Motion
 import {
   User, Mail, Phone, MapPin, Calendar, Activity,
   Shield, Camera, Save, X, Droplet, Ruler, Edit2,
@@ -16,7 +16,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger }                       from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger }      from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { loginSuccess } from "@/Redux/Features/authentication/authSlice";
+import toast from "react-hot-toast";
 
 const fmt = (d) =>
   d ? d.toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" }) : null;
@@ -61,7 +64,8 @@ function LockedField({ icon: Icon, iconColor, label, value }) {
 
 // ─── Main ──────────────────────────────────────────────────────────────────
 const UserPage = () => {
-  const {user} =useSelector((state) => state.auth)
+  const {user, token } =useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
 
@@ -78,15 +82,17 @@ const UserPage = () => {
     mobileNumber: user?.mobileNumber || "",
     gender: user?.gender || "Male",
     address: user?.address || "",
-    bloodGroup: user?.bloodGroup || "B+",
-    height: user?.height || "175",
-    weight: user?.weight || "68",
+    bloodGroup: user?.bloodGroup || "",
+    height: user?.height || "",
+    weight: user?.weight || "",
   });
   
-  const [dob,     setDob]     = useState(user?.dob ? new Date(user.dob) : new Date("1998-05-15"));
+  const [dob,     setDob]     = useState(user?.dob ? new Date(user.dob) : null);
   const [dobOpen, setDobOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [saved,   setSaved]   = useState(false);
+  
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,10 +107,59 @@ const UserPage = () => {
     setFormData((prev) => ({ ...prev, bloodGroup: val }));
   };
 
-  function handleSave() {
-    setSaved(true);
+
+
+  async function handleSave() {
+    setIsLoading(true)
+
+    const updateData = {
+      ...formData,
+      name: formData.name,
+      gender: formData.gender ? formData.gender.toLowerCase() : undefined,
+      dob: dob ? dob.toISOString() : null,
+      bloodGroup: formData.bloodGroup,
+      userHeight: formData.height ? Number(formData.height) : undefined,
+      userWeight: formData.weight ? Number(formData.weight) : undefined,
+      userAddress: formData.address,
+    }
+
+    try{
+      const res = await axios.put(`http://localhost:5000/api/update/${user._id}`, updateData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      dispatch(loginSuccess({
+        user: res.data.user,
+        token: token
+      }))
+
+      setSaved(true)
+      setEditing(false)
+      setTimeout(() => setSaved(false), 3000)
+    }catch(err){
+      console.error("Update Error:", err);
+      toast.error(err.response?.data?.message || "Failed to update profile");
+    }finally{
+      setIsLoading(false)
+    }
+  }
+
+  function handleDiscard(){
+    setFormData({
+      name: user?.name || "",
+      email: user?.email || "", 
+      mobileNumber: user?.mobileNumber || "",
+      gender: user?.gender || "Male",
+      address: user?.address || "",
+      bloodGroup: user?.bloodGroup || "",
+      height: user?.userHeight || "",
+      weight: user?.userWeight || "",
+      userAddress: user?.userAddress || "",
+    });
+    // setDob(user?.dob ? new Date(user.dob) : null);
+    const [dob, setDob] = useState(user?.dateOfBirth ? new Date(user.dateOfBirth) : null);
     setEditing(false);
-    setTimeout(() => setSaved(false), 3000);
   }
 
   const initials = formData.name ? formData.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2) : "A";
@@ -314,6 +369,24 @@ const UserPage = () => {
           .zfd:disabled { background:var(--crm); opacity:.65; cursor:not-allowed; border-color:transparent;}
           .zfph { color:#c8c0b4; }
 
+          /* 🚀 NEW: DayPicker Dropdowns Enhancements */
+          .rdp-caption_dropdowns { display: flex !important; gap: 8px; justify-content: center; align-items: center; }
+          .rdp-dropdown { 
+             padding: 6px 10px !important; 
+             border: 1.5px solid var(--bd) !important; 
+             border-radius: 8px !important; 
+             background: var(--cr) !important; 
+             font-family: var(--sf) !important; 
+             font-size: 14px !important; 
+             font-weight: 600 !important;
+             color: var(--ink) !important; 
+             cursor: pointer !important; 
+             appearance: auto !important; 
+          }
+          .rdp-dropdown:focus { outline: none; border-color: var(--gm) !important; background: var(--wh) !important; }
+          .rdp-dropdown_month, .rdp-dropdown_year { margin: 0 !important; }
+          .rdp-vhidden { display: none !important; }
+
           /* Live name preview card */
           .np { display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px; background:linear-gradient(135deg,var(--gp),#d4eee6); border:1px solid #c2ddd5; margin-bottom:20px; }
           .np-av { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,#1a8a60,var(--gd)); display:flex; align-items:center; justify-content:center; font-family:var(--rf); font-size:18px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -358,19 +431,6 @@ const UserPage = () => {
           /* Toast */
           .toast { position:fixed; bottom:20px; left:50%; width: 90%; max-width: 320px; background:var(--gm); color:#dfff4f; font-family:var(--sf); font-size:13px; font-weight:600; padding:11px 24px; border-radius:99px; box-shadow:0 6px 24px rgba(15,61,48,.35); display:flex; align-items:center; justify-content: center; gap:8px; z-index:100; }
           @media (min-width: 640px) { .toast { bottom:32px; width: auto; justify-content: flex-start; } }
-
-          /* DayPicker */
-          .rdp { --rdp-accent-color:var(--gm); --rdp-background-color:var(--gp); margin:0!important; font-family:var(--sf)!important; }
-          .rdp-months { gap:0!important; } .rdp-month, .rdp-table { width:100%!important; }
-          .rdp-head_cell { font-size:10px!important; font-weight:700!important; letter-spacing:.1em!important; text-transform:uppercase!important; color:var(--sand)!important; }
-          .rdp-day { border-radius:9px!important; font-size:13px!important; color:var(--ink)!important; transition:background .1s!important; }
-          .rdp-day:hover:not(.rdp-day_disabled):not(.rdp-day_selected) { background:var(--crd)!important; }
-          .rdp-day_selected, .rdp-day_selected:hover { background:var(--gm)!important; color:#dfff4f!important; font-weight:700!important; }
-          .rdp-day_today:not(.rdp-day_selected) { border:1.5px solid var(--gm)!important; color:var(--gm)!important; font-weight:700!important; }
-          .rdp-nav_button { border-radius:8px!important; color:var(--gm)!important; }
-          .rdp-nav_button:hover { background:var(--crd)!important; }
-          .rdp-caption_label { font-family:var(--rf)!important; font-size:16px!important; font-weight:700!important; color:var(--ink)!important; }
-          .rdp-dropdown { border:1.5px solid var(--bd)!important; border-radius:9px!important; background:var(--wh)!important; font-family:var(--sf)!important; font-size:13px!important; }
 
           /* Popover */
           [data-radix-popper-content-wrapper] { z-index: 9999 !important; }
@@ -483,13 +543,13 @@ const UserPage = () => {
 
                   {/* Locked fields */}
                   <div className="ls">
-                    <LockedField icon={Phone} iconColor="#29c48e" label="Mobile Number" value="+91 98765 43210"/>
-                    <LockedField icon={Mail}  iconColor="#4f8ef7" label="Email Address"  value="amar@email.com"/>
+                    <LockedField icon={Phone} iconColor="#29c48e" label="Mobile Number" value={user?.mobileNumber || "N/A"}/>
+                    <LockedField icon={Mail}  iconColor="#4f8ef7" label="Email Address"  value={user?.email || "N/A"}/>
                   </div>
 
                   <div className="sd"><span>Editable Details</span></div>
 
-                  {/* 🚀 Animated Live name preview */}
+                  {/* Animated Live name preview */}
                   <AnimatePresence>
                     {editing && (
                       <motion.div 
@@ -522,7 +582,7 @@ const UserPage = () => {
                           <input
                             type="text" name="name"
                             value={formData.name} onChange={handleInputChange}
-                            placeholder="Amar Singh" disabled={!editing} className="zfi"
+                            placeholder="Enter your full name" disabled={!editing} className="zfi"
                           />
                         </div>
                       </Field>
@@ -550,7 +610,7 @@ const UserPage = () => {
                             mode="single" selected={dob}
                             onSelect={d=>{setDob(d);setDobOpen(false);}}
                             disabled={{ after:new Date() }}
-                            captionLayout="dropdown-buttons"
+                            captionLayout="dropdown" // 🚀 Changed to dropdown for Year/Month selects
                             fromYear={1940} toYear={new Date().getFullYear()}
                             showOutsideDays
                           />

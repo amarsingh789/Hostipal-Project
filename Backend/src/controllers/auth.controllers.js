@@ -65,6 +65,7 @@ const session = await sessionModel.create({
     res.status(201).json({
         message: 'User registered successfully',
         user: {
+            _id: user._id,
             name: user.name,
             email: user.email,
             mobileNumber: user.mobileNumber
@@ -130,6 +131,7 @@ export async function login(req, res){
     res.status(200).json({
         message: 'Logged in Successfully',
         user: {
+            _id: user._id,
             name: user.name,
             email: user.email,
             mobileNumber: user.mobileNumber
@@ -178,6 +180,7 @@ export async function userData(req, res){
         res.status(200).json({
             message: 'User Fetched Successfully',
             user: {
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 mobileNumber: user.mobileNumber
@@ -439,3 +442,31 @@ export async function logoutAll(req, res){
 //         accessToken
 //     })
 // }
+
+export async function updateProfile(req, res){
+    try{
+        const userId = req.params.id;
+        const updateData = req.body
+
+        const updateUser = await userModel.findByIdAndUpdate(
+            userId,
+            {$set: updateData},
+            {new: true, runValidators: true}
+        ).select('-password')
+
+        if(!updateUser){
+            return res.status(404).json({
+                message: "User not found"
+            })
+        }
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: updateUser
+        })
+    }catch(error){
+        console.error("Profile update Error", error),
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+
+}

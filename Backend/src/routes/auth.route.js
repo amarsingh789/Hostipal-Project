@@ -17,5 +17,8 @@ router.get('/logout-all', authController.logoutAll)
 // router.post('/send-otp', authController.sendOtp)
 // router.post('/verify-otp', authController.verifyOtp)
 
+// Profile update route
+router.put('/update/:id', authController.updateProfile)
+
 export default router
 

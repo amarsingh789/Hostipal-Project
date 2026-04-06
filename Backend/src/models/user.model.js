@@ -57,6 +57,22 @@ const userSchema = new mongoose.Schema({
     isEmailVerified:{
         type: Boolean,
         default: false,
+    },
+    bloodGroup: {
+        type: String,
+        enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    userHeight: {
+        type: Number,
+        min: [0, 'Height cannot be negative'],
+    },
+    userWeight: {
+        type: Number,
+        min: [0, 'Weight cannot be negative'],
+    },
+    userAddress: {
+        type: String,
+        trim: true,
     }
 },{
     timestamps: true
