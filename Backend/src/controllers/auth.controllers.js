@@ -134,7 +134,13 @@ export async function login(req, res){
             _id: user._id,
             name: user.name,
             email: user.email,
-            mobileNumber: user.mobileNumber
+            mobileNumber: user.mobileNumber,
+            gender: user.gender,
+            bloodGroup: user.bloodGroup,
+            userHeight: user.userHeight,
+            userWeight: user.userWeight,
+            userAddress: user.userAddress,
+            dateOfBirth: user.dateOfBirth
         },
         accessToken
     })
@@ -183,7 +189,13 @@ export async function userData(req, res){
                 _id: user._id,
                 name: user.name,
                 email: user.email,
-                mobileNumber: user.mobileNumber
+                mobileNumber: user.mobileNumber,
+                gender: user.gender,
+                bloodGroup: user.bloodGroup,
+                userHeight: user.userHeight,
+                userWeight: user.userWeight,
+                userAddress: user.userAddress,
+                dateOfBirth: user.dateOfBirth
             }
         });
     }catch(err){

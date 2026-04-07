@@ -185,9 +185,19 @@ export default function BookDoctor() {
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         input:focus, textarea:focus { outline: none; border-color: #0F766E !important; }
-        .rm-popover { z-index: 9999 !important; padding: 14px !important; border-radius: 20px !important; background: white !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important;}
-        .rdp { --rdp-accent-color: #0F766E; margin: 0 !important; }
-        .rdp-day_selected { background: #0F766E !important; }
+        
+        /* Popover clean styling */
+        .rm-popover { z-index: 9999 !important; padding: 16px !important; border-radius: 16px !important; background: white !important; box-shadow: 0 10px 40px rgba(0,0,0,0.12) !important; width: auto !important; border: 1px solid #e2e8f0 !important; }
+        
+        /* React Day Picker Customization */
+        .rdp { --rdp-accent-color: #0F766E; --rdp-background-color: #E6F4F1; margin: 0 !important; font-family: 'Inter', sans-serif !important; }
+        .rdp-day_selected { background: #0F766E !important; color: white !important; font-weight: bold; }
+        .rdp-day_selected:hover { background: #053b32 !important; }
+        .rdp-button:hover:not(.rdp-day_selected):not([disabled]) { background: #f1f5f9 !important; }
+        .rdp-day { border-radius: 8px !important; transition: all 0.2s ease; }
+        .rdp-head_cell { font-size: 12px !important; font-weight: 600 !important; color: #64748b !important; text-transform: uppercase; padding-bottom: 8px; }
+        .rdp-nav_button { border-radius: 8px !important; color: #0F766E !important; }
+        .rdp-caption_label { font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; color: #053b32 !important; }
       `}</style>
 
       {/* 🚀 NAYA WRAPPER: Buttons aur Form ab ek hi relative flow mein hain 🚀 */}
@@ -305,25 +315,36 @@ export default function BookDoctor() {
                   <h2 style={styles.stepTitle}>Date & Time</h2>
                   <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                     <div>
-                      <label style={styles.label}>Date</label>
+                      <label style={styles.label}>Select Date</label>
                       <Popover open={dateOpen} onOpenChange={setDateOpen}>
                         <PopoverTrigger asChild>
-                          <button style={{ ...styles.input, display: "flex", alignItems: "center", color: form.date ? "#1e293b" : "#94a3b8" }}>
+                          <button style={{ ...styles.input, display: "flex", alignItems: "center", color: form.date ? "#1e293b" : "#94a3b8", borderColor: errors.date ? "#ef4444" : "#e2e8f0" }}>
                             <CalendarIcon style={{ marginRight: "8px", width: "18px", color: "#0F766E" }} />
-                            {form.date ? format(form.date, "PPP") : <span>Pick a date</span>}
+                            {form.date ? format(form.date, "PPP") : <span>Pick an upcoming date</span>}
                           </button>
                         </PopoverTrigger>
-                        <PopoverContent className="rm-popover" align="center">
-                          <DayPicker mode="single" selected={form.date} onSelect={(d) => { update("date", d); setDateOpen(false); }} disabled={{ before: new Date() }} />
+                        <PopoverContent className="rm-popover" align="start">
+                          <DayPicker 
+                            mode="single" 
+                            selected={form.date} 
+                            onSelect={(d) => { update("date", d); setDateOpen(false); }} 
+                            disabled={{ before: new Date() }} // Past dates disabled
+                          />
                         </PopoverContent>
                       </Popover>
+                      {errors.date && <span style={styles.error}>{errors.date}</span>}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fill, minmax(120px, 1fr))", gap: "10px" }}>
-                      {TIME_SLOTS.map((slot) => (
-                        <button key={slot.id} disabled={!slot.available} onClick={() => update("timeSlot", slot)} style={{ ...styles.timeSlot, background: form.timeSlot?.id === slot.id ? "#0F766E" : "#fff", color: form.timeSlot?.id === slot.id ? "#fff" : slot.available ? "#334155" : "#cbd5e1" }}>
-                          {slot.time}
-                        </button>
-                      ))}
+
+                    <div>
+                      <label style={styles.label}>Available Time Slots</label>
+                      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fill, minmax(120px, 1fr))", gap: "10px" }}>
+                        {TIME_SLOTS.map((slot) => (
+                          <button key={slot.id} disabled={!slot.available} onClick={() => update("timeSlot", slot)} style={{ ...styles.timeSlot, background: form.timeSlot?.id === slot.id ? "#0F766E" : "#fff", color: form.timeSlot?.id === slot.id ? "#fff" : slot.available ? "#334155" : "#cbd5e1" }}>
+                            {slot.time}
+                          </button>
+                        ))}
+                      </div>
+                      {errors.timeSlot && <span style={styles.error}>{errors.timeSlot}</span>}
                     </div>
                   </div>
                 </div>
