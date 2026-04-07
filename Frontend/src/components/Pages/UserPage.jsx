@@ -80,14 +80,15 @@ const UserPage = () => {
     name: user?.name || "",
     email: user?.email || "", 
     mobileNumber: user?.mobileNumber || "",
-    gender: user?.gender || "Male",
-    address: user?.address || "",
+    // gender: user?.gender || "Male",
+    gender: user?.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Male",
+    address: user?.userAddress || "",
     bloodGroup: user?.bloodGroup || "",
-    height: user?.height || "",
-    weight: user?.weight || "",
+    height: user?.userHeight || "",
+    weight: user?.userWeight || "",
   });
   
-  const [dob,     setDob]     = useState(user?.dob ? new Date(user.dob) : null);
+  const [dob,     setDob]     = useState(user?.dateOfBirth ? new Date(user.dateOfBirth) : null);
   const [dobOpen, setDobOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [saved,   setSaved]   = useState(false);
@@ -116,7 +117,7 @@ const UserPage = () => {
       ...formData,
       name: formData.name,
       gender: formData.gender ? formData.gender.toLowerCase() : undefined,
-      dob: dob ? dob.toISOString() : null,
+      dateOfBirth: dob ? dob.toISOString() : null,
       bloodGroup: formData.bloodGroup,
       userHeight: formData.height ? Number(formData.height) : undefined,
       userWeight: formData.weight ? Number(formData.weight) : undefined,
@@ -150,15 +151,16 @@ const UserPage = () => {
       name: user?.name || "",
       email: user?.email || "", 
       mobileNumber: user?.mobileNumber || "",
-      gender: user?.gender || "Male",
-      address: user?.address || "",
+      // gender: user?.gender || "Male",
+      gender: user?.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Male",
+      address: user?.userAddress || "",
       bloodGroup: user?.bloodGroup || "",
       height: user?.userHeight || "",
       weight: user?.userWeight || "",
-      userAddress: user?.userAddress || "",
     });
     // setDob(user?.dob ? new Date(user.dob) : null);
-    const [dob, setDob] = useState(user?.dateOfBirth ? new Date(user.dateOfBirth) : null);
+    // const [dob, setDob] = useState(user?.dateOfBirth ? new Date(user.dateOfBirth) : null);
+    setDob(user?.dateOfBirth ? new Date(user.dateOfBirth) : null);
     setEditing(false);
   }
 
