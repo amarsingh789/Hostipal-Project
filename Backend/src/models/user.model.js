@@ -46,14 +46,6 @@ const userSchema = new mongoose.Schema({
     dateOfBirth: {
         type: Date,
     },
-    profileImage: {
-      type: String,
-      default: 'default-avatar.png',
-    },
-    isPhoneVerified: {
-        type: Boolean,
-        default: false
-    },
     isEmailVerified:{
         type: Boolean,
         default: false,
@@ -70,10 +62,23 @@ const userSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'Weight cannot be negative'],
     },
+    // VITALS FIELDS
+    heartRate: {
+        type: Number
+    },
+    bpSys: {
+        type: Number,
+    },
+    bpDia: {
+        type: Number,
+    },
+    healthScore: {
+        type: Number,
+    },
     userAddress: {
         type: String,
         trim: true,
-    }
+    },
 },{
     timestamps: true
 })
