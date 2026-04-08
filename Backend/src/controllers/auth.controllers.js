@@ -140,7 +140,11 @@ export async function login(req, res){
             userHeight: user.userHeight,
             userWeight: user.userWeight,
             userAddress: user.userAddress,
-            dateOfBirth: user.dateOfBirth
+            dateOfBirth: user.dateOfBirth,
+            heartRate: user.heartRate,
+            bpSys: user.bpSys,
+            bpDia: user.bpDia,
+            healthScore: user.healthScore
         },
         accessToken
     })
@@ -195,7 +199,12 @@ export async function userData(req, res){
                 userHeight: user.userHeight,
                 userWeight: user.userWeight,
                 userAddress: user.userAddress,
-                dateOfBirth: user.dateOfBirth
+                dateOfBirth: user.dateOfBirth,
+
+                heartRate: user.heartRate,
+                bpSys: user.bpSys,
+                bpDia: user.bpDia,
+                healthScore: user.healthScore
             }
         });
     }catch(err){
