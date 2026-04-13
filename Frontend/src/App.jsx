@@ -26,6 +26,7 @@ import PatientDashboard from "./components/Pages/PatientDashboard";
 import UserPage from "./components/Pages/UserPage";
 import DoctorPage from "./components/Pages/DoctorPage";
 import AboutPage from "./components/Pages/AboutPage";
+import ZivaChatbot from "./components/GenAi/ZivaChatbot";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -152,6 +153,7 @@ const App = () => {
             <Footer/>
           </div>
         }/>
+        <Route path="/ai" element= {<ZivaChatbot/>}/>
       </Routes>
     </div>
   );
