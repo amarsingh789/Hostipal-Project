@@ -26,6 +26,7 @@ import AppointmentDetailsModal from "./AppointmentDetailsModal";
 import api from "../../utils/axiosInstance.js";
 import axios from "axios";
 import { loginSuccess } from "@/Redux/Features/authentication/authSlice";
+import ZivaChatbot from "../GenAi/ZivaChatbot";
 
 const PatientDashboard = () => {
   const dispatch = useDispatch();
@@ -384,6 +385,7 @@ const PatientDashboard = () => {
           <AppointmentDetailsModal isOpen={isDetailsOpen} onClose={() => setIsDetailsOpen(false)} appointment={selectedApt} />
         </>
       )}
+      <ZivaChatbot/>
     </div>
   );
 };
