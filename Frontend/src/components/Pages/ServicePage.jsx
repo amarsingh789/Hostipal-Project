@@ -1,6 +1,7 @@
 import React from "react";
 import { HeartPulse, HeartHandshake, ArrowRight, CheckCircle2, ShieldAlert, Syringe, Activity } from 'lucide-react';
 import { motion } from "motion/react"; 
+import { Link } from "react-router-dom";
 
 const ServicePage = () => {
   const services = [
@@ -190,13 +191,13 @@ const ServicePage = () => {
                      ))}
                    </ul>
 
-                   <button className={`mt-auto flex items-center justify-between w-full font-bold text-sm py-4 px-6 rounded-xl transition-all duration-300 bg-gray-900 text-white hover:opacity-90 group/btn`}>
+                   <Link to='/dashboard' className={`mt-auto flex items-center justify-between w-full font-bold text-sm py-4 px-6 rounded-xl transition-all duration-300 bg-gray-900 text-white hover:opacity-90 group/btn`}>
                      Explore Department
                      <ArrowRight
                        size={18}
                        className={`transition-transform group-hover/btn:translate-x-1`}
                      />
-                   </button>
+                   </Link>
                 </div>
               </motion.div>
             );
