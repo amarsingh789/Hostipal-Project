@@ -17,6 +17,7 @@ Welcome to the Hospital Project Backend API Documentation. This document provide
 - [Authentication](#authentication)
 - [Authentication Endpoints](#authentication-endpoints)
 - [Appointment Endpoints](#appointment-endpoints)
+- [AI Chat Endpoints](#ai-chat-endpoints)
 - [Error Handling](#error-handling)
 - [Status Codes Reference](#status-codes-reference)
 
@@ -27,8 +28,8 @@ The Hospital Project Backend is built with Node.js and Express.js, providing RES
 
 ## Base URL
 ```
-http://localhost:5000/api
-http://localhost:5000/zivacare
+http://localhost:5000/api              # Auth & AI endpoints
+http://localhost:5000/zivacare         # Appointment endpoints
 ```
 
 ---
@@ -50,12 +51,14 @@ Backend/
 │   │   └── otp.model.js               # OTP schema (for future use)
 │   ├── controllers/
 │   │   ├── auth.controllers.js        # Authentication logic
-│   │   └── appointment.controllers.js # Appointment management logic
+│   │   ├── appointment.controllers.js # Appointment management logic
+│   │   └── ai.controllers.js          # AI chat functionality (Gemini API)
 │   ├── middleware/
 │   │   └── auth.middleware.js         # JWT verification middleware
 │   ├── routes/
 │   │   ├── auth.route.js              # Authentication routes
-│   │   └── appointment.route.js       # Appointment routes
+│   │   ├── appointment.route.js       # Appointment routes
+│   │   └── ai.route.js                # AI chat routes
 │   └── utils/
 │       └── utils.js                   # Utility functions (OTP generation, etc.)
 ```
@@ -101,6 +104,7 @@ app.listen(5000, ()=> {
 
 **Route Mounting**:
 - `/api` → Authentication routes
+- `/api/ai` → AI chat routes
 - `/zivacare` → Appointment routes
 
 ```javascript
@@ -114,6 +118,7 @@ app.use(cors({
     credentials: true
 }))
 app.use('/api', authRoute)
+app.use('/api/ai', aiRoutes)
 app.use('/zivacare', apointRoute)
 ```
 
@@ -355,6 +360,48 @@ router.post('/bookAppointment', verifyToken, appointmentRoute.bookAppointment)
    - Enforces 24-hour rescheduling window
    - Prevents conflicts with other bookings
 
+### src/controllers/ai.controllers.js
+**Purpose**: Handle AI-powered health chat functionality using Google Gemini API
+
+**Dependencies**:
+- `@google/generative-ai`: Google's Generative AI library
+
+**Exported Functions**:
+
+1. **askAI(req, res)**
+   - Receives user message for health-related queries
+   - Sends prompt to Google Gemini AI model
+   - Returns AI-generated response
+
+**Features**:
+- Uses Gemini Flash model for fast responses
+- Smart system prompt with context-aware behavior:
+  - Casual, friendly tone like WhatsApp conversation
+  - Supports Hinglish (mix of Hindi and English)
+  - Provides basic health tips for symptoms
+  - Guides users to book doctor consultation when needed
+  - No medical prescription capabilities
+- Keeps responses short (1-2 sentences max)
+- Empathetic and human-like interaction
+
+**Request Format**:
+```javascript
+{
+  message: "User's health question or greeting"
+}
+```
+
+**Response Format**:
+```javascript
+{
+  message: "AI-generated response based on user query"
+}
+```
+
+**Error Handling**:
+- Returns 400 if message is empty
+- Returns 500 with friendly message if API fails
+
 ---
 
 ## Routes
@@ -381,6 +428,13 @@ router.post('/bookAppointment', verifyToken, appointmentRoute.bookAppointment)
 | GET | `/appointments/getAppointments` | getAppointments | Bearer Token | Get user appointments |
 | PUT | `/appointments/cancel/:id` | cancelAppointment | Bearer Token | Cancel appointment |
 | PUT | `/appointments/reschedule/:id` | rescheduleAppointment | Bearer Token | Reschedule appointment |
+
+### src/routes/ai.route.js
+**Base URL**: `/api/ai`
+
+| Method | Endpoint | Controller | Authentication | Description |
+|--------|----------|-----------|-----------------|-------------|
+| POST | `/ai/ask` | askAI | No | Chat with AI health buddy |
 
 ---
 
@@ -426,6 +480,7 @@ export function generateOtp(){
 | **dotenv** | ^17.3.1 | Load environment variables |
 | **morgan** | ^1.10.1 | HTTP request logger |
 | **moment** | ^2.30.1 | Date/time manipulation (appointment scheduling) |
+| **@google/generative-ai** | Latest | Google Gemini AI for health chat feature |
 
 ---
 
@@ -970,6 +1025,119 @@ Content-Type: application/json
 - `404 Not Found`: Appointment not found
 - `500 Internal Server Error`: Server error while rescheduling
 - `401 Unauthorized`: Invalid or missing token
+
+---
+
+## AI Chat Endpoints
+
+### 1. Ask AI Health Buddy
+**Endpoint**: `POST /ai/ask`
+
+**Description**: Chat with Ziva, the AI health buddy, for general health queries, symptoms, and wellness advice
+
+**Base URL**: `http://localhost:5000/api/ai`
+
+**Request Headers**:
+```
+Content-Type: application/json
+```
+
+**Request Body**:
+```json
+{
+  "message": "I have a headache, what should I do?"
+}
+```
+
+**Field Validation**:
+- `message` (String, Required): User's health query or greeting (no length limit)
+
+**Response** (200 OK):
+```json
+{
+  "message": "Oh, apna dhyan rakho! Zyada pani piye, thoda rest lo. Agar zyada dikkat ho toh app par doctor se 'Book a Consult' kar sakte ho."
+}
+```
+
+**AI Features**:
+- **Context Awareness**:
+  - Greetings: Warm, friendly response asking how you're feeling
+  - Symptoms: Empathetic response with basic safety tips + doctor consultation suggestion
+  - Health Questions: Practical, casual advice in user's language
+  
+- **Language Support**:
+  - English: Professional yet friendly tone
+  - Hindi/Hinglish: Casual WhatsApp-like conversation style
+  - Mixed: Adapts to user's language preference
+  
+- **Response Style**:
+  - Maximum 1-2 sentences (conversational)
+  - Empathetic and warm tone
+  - No medical prescriptions
+  - Guides to doctor consultation when needed
+
+**Example Requests**:
+
+**Example 1: Greeting**
+```json
+{
+  "message": "Hi, kaise ho?"
+}
+```
+Response:
+```json
+{
+  "message": "Hey! Mai thik hoon, sukriya. Aap kaisa feel kar rahe ho aaj? Kuch alag tha ya sirf check-in kar rahe ho? 😊"
+}
+```
+
+**Example 2: Symptom Query**
+```json
+{
+  "message": "I'm having chest pain and shortness of breath"
+}
+```
+Response:
+```json
+{
+  "message": "That sounds concerning, please take it seriously. Try to stay calm and sit down. You should consult a doctor right away using our 'Book a Consult' feature."
+}
+```
+
+**Example 3: Health Tip Request**
+```json
+{
+  "message": "What's good for glowing skin?"
+}
+```
+Response:
+```json
+{
+  "message": "Drink plenty of water, get good sleep, and protect from sun! Natural glow aata hai when you're healthy inside out ✨"
+}
+```
+
+**Error Responses**:
+- `400 Bad Request`: Message field is missing or empty
+  ```json
+  {
+    "message": "Please provide a message."
+  }
+  ```
+
+- `500 Internal Server Error`: API unavailable
+  ```json
+  {
+    "reply": "Sorry, my servers are a bit busy right now. Please try again in a moment!"
+  }
+  ```
+
+**Important Notes**:
+- No authentication required (open endpoint)
+- AI responses are generated in real-time using Google Gemini Flash model
+- Responses are contextual and adapt to user's language
+- Not a medical diagnosis tool - guides users to professional help when needed
+- Response time: ~2-5 seconds typically
 
 ---
 
