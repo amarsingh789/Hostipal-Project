@@ -28,6 +28,7 @@ import DoctorPage from "./components/Pages/DoctorPage";
 import AboutPage from "./components/Pages/AboutPage";
 import ZivaChatbot from "./components/GenAi/ZivaChatbot";
 import Insurance from "./components/Pages/Insurance";
+import Result from "./components/QuickLinks/Result";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -159,6 +160,13 @@ const App = () => {
           <div>
             <Navbar />
             <Insurance/>
+            <Footer/>
+          </div>
+        }/>
+        <Route path="/results" element={
+          <div>
+            <Navbar />
+            <Result/>
             <Footer/>
           </div>
         }/>
