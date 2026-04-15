@@ -1,7 +1,7 @@
 import { Users, User, Briefcase, Handshake, ArrowRight, CheckCircle2 } from "lucide-react";
 import React from "react";
 import { motion } from "motion/react"; 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PlanPage = () => {
   const navigate = useNavigate()
@@ -164,8 +164,8 @@ const PlanPage = () => {
             </ul>
 
             {/* Button */}
-            <button
-              onClick={() => navigate("/insurance")}
+            <Link to="/insurance"
+              // onClick={() => navigate("/insurance")}
               className={`flex items-center justify-center gap-2 font-bold text-sm py-4 rounded-2xl transition-all duration-300 mt-6 ${plan.btnTheme}`}
             >
               Explore Plan{" "}
@@ -173,7 +173,7 @@ const PlanPage = () => {
                 size={18}
                 className="group-hover:translate-x-2 transition-transform"
               />
-            </button>
+            </Link>
           </motion.div>
         ))}
       </motion.div>

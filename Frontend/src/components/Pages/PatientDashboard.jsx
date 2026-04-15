@@ -339,15 +339,20 @@ const PatientDashboard = () => {
               <h3 className="font-bold font-poppins text-[#021814] mb-4 text-sm md:text-base">Quick Links</h3>
               <div className="grid grid-cols-4 sm:grid-cols-2 gap-2 md:gap-3">
                 {[
-                  { icon: FileText, label: "Records", color: "text-blue-600", bg: "bg-blue-50" },
-                  { icon: Droplet, label: "Results", color: "text-red-500", bg: "bg-red-50" },
-                  { icon: Video, label: "Telehealth", color: "text-purple-600", bg: "bg-purple-50" },
-                  { icon: ShieldCheck, label: "Insurance", color: "text-emerald-600", bg: "bg-emerald-50" },
+                  { icon: FileText, label: "Records", color: "text-blue-600", bg: "bg-blue-50", link: "/records" },
+                  { icon: Droplet, label: "Results", color: "text-red-500", bg: "bg-red-50", link: "/results" },
+                  { icon: Video, label: "Telehealth", color: "text-purple-600", bg: "bg-purple-50", link: "/telehealth" },
+                  { icon: ShieldCheck, label: "Insurance", color: "text-emerald-600", bg: "bg-emerald-50", link: "/insurance" },
                 ].map((item, idx) => (
-                  <motion.button whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} key={idx} className={`p-3 md:p-4 rounded-xl md:rounded-2xl flex flex-col items-center justify-center gap-1.5 md:gap-2 transition-shadow hover:shadow-md ${item.bg}`}>
-                    <item.icon size={18} className={`${item.color}`} />
-                    <span className="text-[10px] md:text-xs font-semibold text-gray-700">{item.label}</span>
-                  </motion.button>
+                  <Link to={item.link} key={idx} className="block w-full h-full">
+                    <motion.div 
+                      whileHover={{scale: 1.05, y: -2}}
+                      whileTap={{scale: 0.95}}
+                      className={`w-full h-full p-3 md:p-4 rounded-xl md:rounded-2xl flex flex-col items-center justify-center gap-1.5 md:gap-2 transition-shadow hover:shadow-md ${item.bg}`}>
+                        <item.icon size={18} className={`${item.color}`} />
+                        <span className="text-[10px] md:text-xs font-semibold text-gray-700">{item.label}</span>
+                    </motion.div>
+                  </Link>
                 ))}
               </div>
             </motion.div>

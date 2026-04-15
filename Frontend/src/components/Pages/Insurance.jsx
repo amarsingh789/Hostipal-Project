@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   ShieldCheck, FileText, Activity, Clock, CheckCircle2, ChevronLeft, 
@@ -87,6 +87,10 @@ const Insurance = () => {
   
   const [activePlan, setActivePlan] = useState("individual");
   const [billingCycle, setBillingCycle] = useState("yearly");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth"})
+  }, [])
 
   const currentPlan = plansData[activePlan];
 
