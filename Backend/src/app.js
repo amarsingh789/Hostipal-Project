@@ -5,6 +5,7 @@ import apointRoute from './routes/appointment.route.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'; 
 import aiRoutes from './routes/ai.route.js'
+import patientRoute from './routes/patient.routes.js'
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cors({
     credentials: true // Agar cookies use karni hain toh zaroori hai
 }))
 app.use('/api', authRoute)
+app.use('/patient', patientRoute)
 app.use('/api/ai', aiRoutes)
 app.use('/zivacare', apointRoute)
 
