@@ -140,7 +140,7 @@ const LoginPage = () => {
           </div>
           <div className="max-w-md w-full mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-[#053b32] mb-1 tracking-tight">
-              Sign In
+              Log In
             </h2>
             <p className="text-sm md:text-base text-gray-500 mb-8">Access your health account.</p>
 

@@ -30,6 +30,7 @@ import ZivaChatbot from "./components/GenAi/ZivaChatbot";
 import Insurance from "./components/Pages/Insurance";
 import Result from "./components/QuickLinks/Result";
 import Records from "./components/QuickLinks/Record";
+import Telehealth from "./components/QuickLinks/Telehealth";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -171,10 +172,17 @@ const App = () => {
             <Footer/>
           </div>
         }/>
-        <Route path="/record" element={
+        <Route path="/records" element={
           <div>
             <Navbar />
             <Records/>
+            <Footer/>
+          </div>
+        }/>
+        <Route path="/telehealth" element={
+          <div>
+            <Navbar />
+            <Telehealth/>
             <Footer/>
           </div>
         }/>
