@@ -8,19 +8,23 @@ import { motion, AnimatePresence } from "motion/react";
 import toast from "react-hot-toast";
 import api from "../../utils/axiosInstance.js";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@/components/ui/badge"; 
 
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { format } from "date-fns";
 
+import { addAppointment, setAllAppointments } from "../../Redux/Features/authentication/appointmentSlice.js";
+
 const Telehealth = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth);
   
   const [activeTab, setActiveTab] = useState("upcoming");
-  const [appointments, setAppointments] = useState([]);
+  // const [appointments, setAppointments] = useState([]);
+  const appointments = useSelector((state) => state.appointment?.list || [])
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -34,9 +38,11 @@ const Telehealth = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isSpecialtyOpen, setIsSpecialtyOpen] = useState(false);
   const [isTimeOpen, setIsTimeOpen] = useState(false);
+  const [isDoctorOpen, setIsDoctorOpen] = useState(false)
   
   const [bookingData, setBookingData] = useState({
     specialty: "",
+    doctor: "",
     date: null,
     time: "",
     reason: ""
@@ -53,21 +59,56 @@ const Telehealth = () => {
     "02:00 PM", "02:30 PM", "03:00 PM", "04:00 PM"
   ];
 
+  const doctorsList = [
+    "Dr. Meera Patel", "Dr. Ananya Sharma", "Dr. Neha Verma", 
+    "Dr. Vikram Singh", "Dr. Rohan Gupta", "Dr. Sanjay Kumar", "Dr. Amit Desai"
+  ];
+
+  const getDoctorBySpecialty = (specialty) => {
+    const doctors = {
+      "General Physician": "Dr. Meera Patel",
+      "Cardiology": "Dr. Ananya Sharma",
+      "Dermatology": "Dr. Neha Verma",
+      "Mental Health": "Dr. Vikram Singh",
+      "Orthopedics": "Dr. Rohan Gupta",
+      "Pediatrics": "Dr. Sanjay Kumar",
+      "Neurology": "Dr. Amit Desai"
+    };
+    return doctors[specialty] || "Dr. Available Specialist";
+  };
+
   const fetchTelehealthAppointments = async () => {
     try {
       setLoading(true);
       setHasError(false);
 
+      if (appointments.length > 0) {
+        setLoading(false);
+        return; 
+      }
+
       const response = await api.get("/zivacare/getAppointments").catch(() => ({ data: { appointments: [] } }));
       let fetchedRecords = response.data?.appointments || [];
 
-      fetchedRecords = fetchedRecords.map((rec) => ({
-        ...rec,
-        upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
-        isTelehealth: true, 
-      }));
+      if(fetchedRecords.length > 0){
+        fetchedRecords = fetchedRecords.map((rec) => ({
+          ...rec,
+          upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
+          isTelehealth: true
+        }))
+        dispatch(setAllAppointments(fetchedRecords))
+      }
+
+      // fetchedRecords = fetchedRecords.map((rec) => ({
+      //   ...rec,
+      //   upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
+      //   isTelehealth: true, 
+      // }));
       
-      setAppointments(fetchedRecords);
+      // setAppointments(fetchedRecords);
+      // if(fetchedRecords.length > 0){
+      //   dispatch(setAllAppointments(fetchedRecords))
+      // }
     } catch (error) {
       console.error("Error fetching records:", error);
       toast.error("Failed to load telehealth appointments");
@@ -106,7 +147,7 @@ const Telehealth = () => {
 
   const handleBookSubmit = async (e) => {
     e.preventDefault();
-    if (!bookingData.specialty || !bookingData.date || !bookingData.time || !bookingData.reason) {
+    if (!bookingData.specialty || !bookingData.doctor || !bookingData.date || !bookingData.time || !bookingData.reason) {
       toast.error("Please fill all fields to book.");
       return;
     }
@@ -115,8 +156,26 @@ const Telehealth = () => {
     try {
       const formattedDate = format(bookingData.date, "PP"); 
       
-      // Fake delay
       await new Promise(resolve => setTimeout(resolve, 1500));
+
+      const newAppointment = {
+        _id: "new_" + Date.now(),
+        // doctorName: getDoctorBySpecialty(bookingData.specialty),
+        doctorName: bookingData.doctor,
+        department: bookingData.specialty,
+        date: bookingData.date.toISOString(),
+        time: bookingData.time,
+        status: "Scheduled",
+        upcoming: true,
+        isTelehealth: true,
+        clinic: "Ziva Virtual Clinic",
+        reason: bookingData.reason
+      };
+
+      // setAppointments(prev => [newAppointment, ...prev]);
+      dispatch(addAppointment(newAppointment))
+
+      setActiveTab("upcoming");
 
       toast.success(
         <div className="flex flex-col gap-1">
@@ -127,7 +186,7 @@ const Telehealth = () => {
         </div>, 
         { duration: 5000, icon: '✅' }
       );
-
+      
       console.log("🚀 Payload going to DB:", {
         specialty: bookingData.specialty,
         appointmentDate: bookingData.date,
@@ -136,8 +195,8 @@ const Telehealth = () => {
       });
 
       setIsBookingOpen(false);
-      setBookingData({ specialty: "", date: null, time: "", reason: "" });
-      fetchTelehealthAppointments(); 
+      setBookingData({ specialty: "", doctor: "", date: null, time: "", reason: "" });
+      // fetchTelehealthAppointments(); 
 
     } catch (error) {
       toast.error("Failed to book appointment. Try again.");
@@ -161,6 +220,13 @@ const Telehealth = () => {
     hidden: { opacity: 0, y: 15, scale: 0.98 },
     visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 24 } },
     exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
+  };
+
+  const closeAllDropdowns = () => {
+    setIsSpecialtyOpen(false);
+    setIsDoctorOpen(false);
+    setIsCalendarOpen(false);
+    setIsTimeOpen(false);
   };
 
   return (
@@ -251,7 +317,7 @@ const Telehealth = () => {
                               <div className="flex items-center gap-5">
                                 <div className="relative">
                                   <div className="absolute inset-0 bg-[#dfff4f] rounded-2xl blur-md opacity-30 group-hover:opacity-60 transition-opacity animate-pulse"></div>
-                                  <div className="w-16 h-16 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl border border-white/20 relative z-10">👨‍⚕️</div>
+                                  <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl border border-white/20 relative z-10">👨‍⚕️</div>
                                 </div>
                                 <div>
                                   <div className="flex items-center gap-2 mb-1.5">
@@ -373,7 +439,7 @@ const Telehealth = () => {
         </div>
       </div>
 
-      {/* 🚀 CLEAN SHADCN-STYLE QUICK BOOKING MODAL */}
+      {/* 🚀 QUICK BOOKING MODAL */}
       <AnimatePresence>
         {isBookingOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -407,13 +473,16 @@ const Telehealth = () => {
                     <label className="text-sm font-medium leading-none text-gray-700">Specialty</label>
                     <button 
                       type="button" 
-                      onClick={() => {setIsSpecialtyOpen(!isSpecialtyOpen); setIsCalendarOpen(false); setIsTimeOpen(false);}}
+                      onClick={() => {
+                        setIsSpecialtyOpen(!isSpecialtyOpen);
+                        setIsDoctorOpen(false); setIsCalendarOpen(false); setIsTimeOpen(false);
+                      }}
                       className={`flex h-10 w-full items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-all outline-none ${isSpecialtyOpen ? 'border-[#0F766E] ring-2 ring-[#0F766E]/20' : 'border-gray-300 hover:bg-gray-50'}`}
                     >
                       <span className={bookingData.specialty ? "text-gray-900" : "text-gray-500"}>
                         {bookingData.specialty || "Select a specialty"}
                       </span>
-                      <ChevronDown size={16} className={`text-gray-500 transition-transform ${isSpecialtyOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown size={16} className={`text-gray-500 transition-transform duration-300 ${isSpecialtyOpen ? 'rotate-180' : ''}`} />
                     </button>
 
                     <AnimatePresence>
@@ -436,8 +505,45 @@ const Telehealth = () => {
                     </AnimatePresence>
                   </div>
 
+                  {/* 🚀 CUSTOM DOCTOR DROPDOWN */}
+                  <div className="space-y-1.5 relative">
+                    <label className="text-sm font-medium leading-none text-gray-700">Doctor</label>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setIsDoctorOpen(!isDoctorOpen);
+                        setIsSpecialtyOpen(false); setIsCalendarOpen(false); setIsTimeOpen(false);
+                      }}
+                      className={`flex h-10 w-full items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-all outline-none ${isDoctorOpen ? 'border-[#0F766E] ring-2 ring-[#0F766E]/20' : 'border-gray-300 hover:bg-gray-50'}`}
+                    >
+                      <span className={bookingData.doctor ? "text-gray-900" : "text-gray-500"}>
+                        {bookingData.doctor || "Select a doctor"}
+                      </span>
+                      <ChevronDown size={16} className={`text-gray-500 transition-transform duration-300 ${isDoctorOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    <AnimatePresence>
+                      {isDoctorOpen && (
+                        <motion.div 
+                          initial={{opacity: 0, y: -5}} animate={{opacity: 1, y: 5}} exit={{opacity: 0, y: -5}}
+                          className="absolute top-[100%] left-0 w-full bg-white rounded-md border border-gray-200 shadow-lg z-50 overflow-hidden max-h-48 overflow-y-auto"
+                        >
+                          {doctorsList.map(doc => (
+                            <div 
+                              key={doc} 
+                              onClick={() => {setBookingData({...bookingData, doctor: doc}); setIsDoctorOpen(false);}}
+                              className="px-3 py-2.5 text-sm text-gray-700 hover:bg-[#E6F4F1] hover:text-[#0F766E] cursor-pointer transition-colors"
+                            >
+                              {doc}
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
-                    {/* 🚀 CUSTOM DATE PICKER DROPDOWN */}
+                    {/* CUSTOM DATE PICKER */}
                     <div className="space-y-1.5 relative">
                       <label className="text-sm font-medium leading-none text-gray-700">Date</label>
                       <button
@@ -455,7 +561,7 @@ const Telehealth = () => {
                         {isCalendarOpen && (
                           <motion.div 
                             initial={{opacity: 0, y: -5}} animate={{opacity: 1, y: 5}} exit={{opacity: 0, y: -5}}
-                            className="absolute top-[100%] left-0 bg-white rounded-md border border-gray-200 shadow-lg z-50 p-3"
+                            className="absolute top-[100%] left-0 bg-white rounded-md border border-gray-200 shadow-md z-50 p-3"
                           >
                             <DayPicker
                               mode="single"
@@ -478,26 +584,29 @@ const Telehealth = () => {
                       </AnimatePresence>
                     </div>
 
-                    {/* 🚀 CUSTOM TIME DROPDOWN */}
+                    {/* CUSTOM TIME DROPDOWN */}
                     <div className="space-y-1.5 relative">
                       <label className="text-sm font-medium leading-none text-gray-700">Time</label>
                       <button 
                         type="button" 
-                        onClick={() => {setIsTimeOpen(!isTimeOpen); setIsSpecialtyOpen(false); setIsCalendarOpen(false);}}
+                        onClick={() => {
+                          setIsTimeOpen(!isTimeOpen); 
+                          setIsSpecialtyOpen(false); setIsDoctorOpen(false); setIsCalendarOpen(false);
+                        }}
                         className={`flex h-10 w-full items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-all outline-none ${isTimeOpen ? 'border-[#0F766E] ring-2 ring-[#0F766E]/20' : 'border-gray-300 hover:bg-gray-50'}`}
                       >
                         <span className={bookingData.time ? "text-gray-900 flex items-center gap-2" : "text-gray-500 flex items-center gap-2"}>
                            <Clock size={16} className="text-gray-500"/>
                           {bookingData.time || "Select time"}
                         </span>
-                        <ChevronDown size={16} className={`text-gray-500 transition-transform ${isTimeOpen ? 'rotate-180' : ''}`} />
+                        <ChevronDown size={16} className={`text-gray-500 transition-transform duration-300 ${isTimeOpen ? 'rotate-180' : ''}`} />
                       </button>
 
                       <AnimatePresence>
                         {isTimeOpen && (
                           <motion.div 
                             initial={{opacity: 0, y: -5}} animate={{opacity: 1, y: 5}} exit={{opacity: 0, y: -5}}
-                            className="absolute top-[100%] left-0 w-full bg-white rounded-md border border-gray-200 shadow-lg z-50 overflow-hidden"
+                            className="absolute bottom-[100%] left-0 mb-2 w-full bg-white rounded-md border border-gray-200 shadow-lg z-50 overflow-hidden"
                           >
                             <div className="grid grid-cols-2 gap-1 p-2 max-h-48 overflow-y-auto custom-scrollbar">
                               {timeSlotsList.map(time => (
