@@ -15,7 +15,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { format } from "date-fns";
 
-import { addAppointment, setAllAppointments } from "../../Redux/Features/authentication/appointmentSlice.js";
+import { addAppointment, setAllAppointments, clearAppointments } from "../../Redux/Features/authentication/appointmentSlice.js";
 
 const Telehealth = () => {
   const navigate = useNavigate();
@@ -78,16 +78,61 @@ const Telehealth = () => {
   };
 
   const fetchTelehealthAppointments = async () => {
-    try {
+    // try {
+    //   setLoading(true);
+    //   setHasError(false);
+
+    //   if (appointments.length > 0) {
+    //     setLoading(false);
+    //     return; 
+    //   }
+
+    //   const response = await api.get("/zivacare/getAppointments").catch(() => ({ data: { appointments: [] } }));
+    //   let fetchedRecords = response.data?.appointments || [];
+
+    //   if(fetchedRecords.length > 0){
+    //     fetchedRecords = fetchedRecords.map((rec) => ({
+    //       ...rec,
+    //       upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
+    //       isTelehealth: true
+    //     }))
+    //     dispatch(setAllAppointments(fetchedRecords))
+    //   }
+
+    //   // fetchedRecords = fetchedRecords.map((rec) => ({
+    //   //   ...rec,
+    //   //   upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
+    //   //   isTelehealth: true, 
+    //   // }));
+      
+    //   // setAppointments(fetchedRecords);
+    //   // if(fetchedRecords.length > 0){
+    //   //   dispatch(setAllAppointments(fetchedRecords))
+    //   // }
+    // } catch (error) {
+    //   console.error("Error fetching records:", error);
+    //   toast.error("Failed to load telehealth appointments");
+    //   setHasError(true);
+    // } finally {
+    //   setLoading(false);
+    // }
+
+
+    try{
       setLoading(true);
       setHasError(false);
 
-      if (appointments.length > 0) {
+      if(!user || !user._id) return;
+
+      const localData = JSON.parse(localStorage.getItem(`local_appointments_${user._id}`));
+
+      if(localData && localData.length > 0){
+        dispatch(setAllAppointments({records : localData, userId : user._id}))
         setLoading(false);
-        return; 
+        return;
       }
 
-      const response = await api.get("/zivacare/getAppointments").catch(() => ({ data: { appointments: [] } }));
+      const response = await api.get("/zivacare/getAppointments").catch(() => ({data: {appointments: []}}));
       let fetchedRecords = response.data?.appointments || [];
 
       if(fetchedRecords.length > 0){
@@ -95,21 +140,12 @@ const Telehealth = () => {
           ...rec,
           upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
           isTelehealth: true
-        }))
-        dispatch(setAllAppointments(fetchedRecords))
+        }));
+        dispatch(setAllAppointments({ records: fetchedRecords, userId: user._id }));
+      }else{
+        dispatch(clearAppointments())
       }
-
-      // fetchedRecords = fetchedRecords.map((rec) => ({
-      //   ...rec,
-      //   upcoming: rec.status !== "Completed" && rec.status !== "Cancelled",
-      //   isTelehealth: true, 
-      // }));
-      
-      // setAppointments(fetchedRecords);
-      // if(fetchedRecords.length > 0){
-      //   dispatch(setAllAppointments(fetchedRecords))
-      // }
-    } catch (error) {
+    }catch (error) {
       console.error("Error fetching records:", error);
       toast.error("Failed to load telehealth appointments");
       setHasError(true);
@@ -173,7 +209,8 @@ const Telehealth = () => {
       };
 
       // setAppointments(prev => [newAppointment, ...prev]);
-      dispatch(addAppointment(newAppointment))
+      // dispatch(addAppointment(newAppointment))
+      dispatch(addAppointment({ appointment: newAppointment, userId: user?._id }))
 
       setActiveTab("upcoming");
 

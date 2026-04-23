@@ -38,6 +38,14 @@
   background-color: white !important;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Figtree Variable', sans-serif;
