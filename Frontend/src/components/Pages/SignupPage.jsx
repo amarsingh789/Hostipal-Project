@@ -125,9 +125,9 @@ const SignupPage = () => {
             </svg>
           </div>
           <div className="relative z-10">
-            <h2 className="text-xl lg:text-2xl font-bold tracking-tight mb-8 lg:mb-16 flex items-center gap-2 text-[#dfff4f]">
+            <Link to="/" className="text-xl lg:text-2xl font-bold tracking-tight mb-8 lg:mb-16 flex items-center gap-2 text-[#dfff4f]">
               Ziva Healthcare
-            </h2>
+            </Link>
           </div>
           <div className="relative z-10 mb-8 lg:mb-11">
             <h1 className="text-3xl lg:text-5xl font-extrabold leading-tight mb-4 lg:mb-6 text-white">

@@ -161,12 +161,12 @@ const Navbar = () => {
                   key={index}
                   className="group relative"
                 >
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="hover:text-white transition-colors duration-300"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                   {/* <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-[#dfff4f] transition-all duration-300 group-hover:w-full rounded-full"></span> */}
                   <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-gradient-to-r from-transparent via-[#dfff4f] to-transparent transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100"></span>
                 </motion.li>
@@ -180,12 +180,12 @@ const Navbar = () => {
                   key={index}
                   className="group relative"
                 >
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="hover:text-white transition-colors duration-300"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                   {/* <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-[#dfff4f] transition-all duration-300 group-hover:w-full rounded-full"></span> */}
                   <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-gradient-to-r from-transparent via-[#dfff4f] to-transparent transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100"></span>
                 </motion.li>
@@ -305,13 +305,13 @@ const Navbar = () => {
               {/* Links */}
               {(isAuthenticated ? authLinks : navLinks).map((link, index) => (
                 <motion.div variants={mobileItemVariants} key={index} className="w-full text-center">
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block text-2xl font-poppins font-bold text-white/80 hover:text-[#dfff4f] transition-colors w-full py-2"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </motion.div>
               ))}
 

@@ -111,6 +111,14 @@ const UserPage = () => {
 
 
   async function handleSave() {
+    if (formData.height && (Number(formData.height) < 0 || Number(formData.height) > 300)) {
+      toast.error("Height must be between 0 and 300 cm");
+      return; 
+    }
+    if (formData.weight && (Number(formData.weight) < 0 || Number(formData.weight) > 500)) {
+      toast.error("Weight must be between 0 and 500 kg");
+      return;
+    }
     setIsLoading(true)
 
     const updateData = {
@@ -668,7 +676,7 @@ const UserPage = () => {
                         <div className="iw">
                           <Ruler size={15} className="ii" style={{ color:"#4f8ef7" }}/>
                           <input
-                            type="number" name="height"
+                            type="number" name="height" min="0" max="300"
                             value={formData.height} onChange={handleInputChange}
                             placeholder="175" disabled={!editing} className="zfi w-suffix"
                           />
@@ -681,7 +689,7 @@ const UserPage = () => {
                         <div className="iw">
                           <Activity size={15} className="ii" style={{ color:"#29c48e" }}/>
                           <input
-                            type="number" name="weight"
+                            type="number" name="weight" min="0" max="500"
                             value={formData.weight} onChange={handleInputChange}
                             placeholder="68" disabled={!editing} className="zfi w-suffix"
                           />

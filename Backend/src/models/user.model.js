@@ -57,10 +57,12 @@ const userSchema = new mongoose.Schema({
     userHeight: {
         type: Number,
         min: [0, 'Height cannot be negative'],
+        max: [300, 'Height cannot be more than 300 cm'],
     },
     userWeight: {
         type: Number,
         min: [0, 'Weight cannot be negative'],
+        max: [500, 'Weight cannot be more than 500 kg'],
     },
     // VITALS FIELDS
     heartRate: {

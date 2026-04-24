@@ -111,9 +111,9 @@ const LoginPage = () => {
           </div>
 
           <div className="relative z-10">
-            <h2 className="text-2xl font-bold tracking-tight mb-16 flex items-center gap-2 text-[#dfff4f]">
+            <Link to="/" className="text-2xl font-bold tracking-tight mb-16 flex items-center gap-2 text-[#dfff4f]">
               Ziva Healthcare
-            </h2>
+            </Link>
           </div>
 
           <div className="relative z-10 mb-12">

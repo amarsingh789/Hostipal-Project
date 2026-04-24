@@ -33,6 +33,7 @@ const Insurance = lazy(() => import("./components/Pages/Insurance"));
 const Result = lazy(() => import("./components/QuickLinks/Result"));
 const Records = lazy(() => import("./components/QuickLinks/Record"));
 const Telehealth = lazy(() => import("./components/QuickLinks/Telehealth"));
+import PreLoader from "./PreLoader/PreLoader";
 
 import LocomotiveScroll from "locomotive-scroll";
 import "locomotive-scroll/dist/locomotive-scroll.css";
@@ -107,171 +108,176 @@ const App = () => {
     };
   }, [isCheckingAuth]);
 
-  useEffect(() => {
-    let timer;
-    if (locoScrollRef.current) {
-      const timer = setTimeout(() => {
-        locoScrollRef.current.update();
-      }, 500);
-    }
+  // useEffect(() => {
+  //   let timer;
+  //   if (locoScrollRef.current) {
+  //     const timer = setTimeout(() => {
+  //       locoScrollRef.current.update();
+  //     }, 500);
+  //   }
 
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [location.pathname]);
+  //   return () => {
+  //     if (timer) clearTimeout(timer);
+  //   };
+  // }, [location.pathname]);
 
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen bg-[#E6F4F1] flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-[#0F766E] animate-spin mb-4" />
-        <p className="text-[#053b32] font-medium font-inter animate-pulse">
-          Starting Ziva Healthcare...
-        </p>
-      </div>
-    );
-  }
+  // if (isCheckingAuth) {
+  //   return (
+  //     <div className="min-h-screen bg-[#E6F4F1] flex flex-col items-center justify-center">
+  //       <Loader2 className="w-12 h-12 text-[#0F766E] animate-spin mb-4" />
+  //       <p className="text-[#053b32] font-medium font-inter animate-pulse">
+  //         Starting Ziva Healthcare...
+  //       </p>
+  //     </div>
+  //   );
+  // }
   return (
-    <div className="relative">
-      <Toaster position="top-center" reverseOrder={false} />
-      <div
-        data-scroll-container
-        ref={scrollRef}
-        className="w-full min-h-screen bg-white"
-      >
-        <div data-scroll-section>
-          <Suspense
-            fallback={
-              <div className="w-full h-screen flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-[#0F766E] animate-spin" />
-              </div>
-            }
+    <>
+      <PreLoader />
+      {!isCheckingAuth && (
+        <div className="relative">
+          <Toaster position="top-center" reverseOrder={false} />
+          <div
+            data-scroll-container
+            ref={scrollRef}
+            className="w-full min-h-screen bg-white"
           >
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <div>
-                    <Navbar />
-                    <div className="px-4">
-                      <HeroSection />
-                      <BodyPage />
-                    </div>
-                    <PlanPage />
-                    <div>
-                      <ServicePage />
-                      <StatsSection />
-                      <TeamPage />
-                      <ReviewPage />
-                      <FAQPage />
-                      <Footer />
-                    </div>
+            <div data-scroll-section>
+              <Suspense
+                fallback={
+                  <div className="w-full h-screen flex items-center justify-center">
+                    <Loader2 className="w-8 h-8 text-[#0F766E] animate-spin" />
                   </div>
                 }
-              />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route
-                path="/appointment"
-                element={
-                  <ProtectedRoute>
-                    <Navbar />
-                    <BookDoctor />
-                    <Footer />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Navbar />
-                    <PatientDashboard />
-                    <Footer />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Navbar />
-                    <UserPage />
-                    <Footer />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/doctor"
-                element={
-                  <div>
-                    <Navbar />
-                    <DoctorPage />
-                    <Footer />
-                  </div>
-                }
-              />
-              <Route
-                path="/about"
-                element={
-                  <div>
-                    <Navbar />
-                    <AboutPage />
-                    <Footer />
-                  </div>
-                }
-              />
-              {/* <Route path="/ai" element= {<ZivaChatbot/>}/> */}
-              <Route
-                path="/insurance"
-                element={
-                  <div>
-                    <Navbar />
-                    <Insurance />
-                    <Footer />
-                  </div>
-                }
-              />
-              <Route
-                path="/results"
-                element={
-                  <div>
-                    <ProtectedRoute>
-                      <Navbar />
-                      <Result />
-                      <Footer />
-                    </ProtectedRoute>
-                  </div>
-                }
-              />
-              <Route
-                path="/records"
-                element={
-                  <div>
-                    <ProtectedRoute>
-                      <Navbar />
-                      <Records />
-                      <Footer />
-                    </ProtectedRoute>
-                  </div>
-                }
-              />
-              <Route
-                path="/telehealth"
-                element={
-                  <div>
-                    <ProtectedRoute>
-                      <Navbar />
-                      <Telehealth />
-                      <Footer />
-                    </ProtectedRoute>
-                  </div>
-                }
-              />
-            </Routes>
-          </Suspense>
+              >
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <div>
+                        <Navbar />
+                        <div className="px-4">
+                          <HeroSection />
+                          <BodyPage />
+                        </div>
+                        <PlanPage />
+                        <div>
+                          <ServicePage />
+                          <StatsSection />
+                          <TeamPage />
+                          <ReviewPage />
+                          <FAQPage />
+                          <Footer />
+                        </div>
+                      </div>
+                    }
+                  />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
+                  <Route
+                    path="/appointment"
+                    element={
+                      <ProtectedRoute>
+                        <Navbar />
+                        <BookDoctor />
+                        <Footer />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Navbar />
+                        <PatientDashboard />
+                        <Footer />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Navbar />
+                        <UserPage />
+                        <Footer />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/doctor"
+                    element={
+                      <div>
+                        <Navbar />
+                        <DoctorPage />
+                        <Footer />
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/about"
+                    element={
+                      <div>
+                        <Navbar />
+                        <AboutPage />
+                        <Footer />
+                      </div>
+                    }
+                  />
+                  {/* <Route path="/ai" element= {<ZivaChatbot/>}/> */}
+                  <Route
+                    path="/insurance"
+                    element={
+                      <div>
+                        <Navbar />
+                        <Insurance />
+                        <Footer />
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/results"
+                    element={
+                      <div>
+                        <ProtectedRoute>
+                          <Navbar />
+                          <Result />
+                          <Footer />
+                        </ProtectedRoute>
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/records"
+                    element={
+                      <div>
+                        <ProtectedRoute>
+                          <Navbar />
+                          <Records />
+                          <Footer />
+                        </ProtectedRoute>
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/telehealth"
+                    element={
+                      <div>
+                        <ProtectedRoute>
+                          <Navbar />
+                          <Telehealth />
+                          <Footer />
+                        </ProtectedRoute>
+                      </div>
+                    }
+                  />
+                </Routes>
+              </Suspense>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
