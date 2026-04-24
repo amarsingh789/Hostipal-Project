@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ShieldCheck,
   HeartPulse,
@@ -13,8 +13,15 @@ import ReviewPage from "./ReviewPage";
 import { Link } from "react-router-dom";
 
 const AboutPage = () => {
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth" 
+    });
+  }, [])
   
-  // Premium Animation Variants
+  // Animation Variants
   const customEase = [0.22, 1, 0.36, 1];
 
   const fadeUp = {
@@ -37,7 +44,7 @@ const AboutPage = () => {
     },
   };
 
-  // Staggering for the Bento Grid (Ek-ek karke aayenge)
+  // Staggering for the Bento Grid
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95, filter: "blur(10px)" },
     visible: (index) => ({
@@ -46,7 +53,7 @@ const AboutPage = () => {
       scale: 1,
       filter: "blur(0px)",
       transition: {
-        delay: index * 0.15, // Har card me 0.15s ka delay
+        delay: index * 0.15,
         duration: 0.8,
         ease: customEase,
       },
@@ -260,7 +267,7 @@ const AboutPage = () => {
           </p>
         </motion.div>
 
-        {/* 🚀 The Custom Bento Grid */}
+        {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:grid-rows-2">
           {values.map((val, index) => (
             <motion.div
@@ -273,7 +280,7 @@ const AboutPage = () => {
               whileHover={{ y: -8, scale: 1.02 }}
               className={`relative flex p-8 sm:p-10 rounded-[2.5rem] border shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden ${val.theme} ${val.colSpan}`}
             >
-              {/* Big Ghost Icon */}
+              {/*Ghost Icon */}
               <div
                 className={`absolute -bottom-6 -right-6 opacity-[0.05] transform group-hover:scale-125 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none`}
               >

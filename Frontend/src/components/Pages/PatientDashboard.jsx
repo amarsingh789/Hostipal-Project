@@ -29,6 +29,12 @@ import { loginSuccess } from "@/Redux/Features/authentication/authSlice";
 import ZivaChatbot from "../GenAi/ZivaChatbot";
 
 const PatientDashboard = () => {
+  useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth" 
+      });
+    }, [])
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
 

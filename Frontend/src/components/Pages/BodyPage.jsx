@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel } from "swiper/modules";
 import { ArrowRight, Star, Activity, FileText } from "lucide-react";
 import { motion } from "motion/react";
+import { Link, useNavigate } from "react-router-dom";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -34,6 +35,7 @@ const services = [
     desc: "Connect with a certified doctor within 60 seconds, anytime.",
     stat: "60 sec connect",
     bg: "bg-gradient-to-br from-[#e8432d] to-[#b32d1c]",
+    link: "/telehealth",
   },
   {
     type: "service",
@@ -44,6 +46,7 @@ const services = [
     desc: "Get e-prescriptions sent directly to your pharmacy in minutes.",
     stat: "Pharmacy-ready",
     bg: "bg-gradient-to-br from-[#f07c3a] to-[#c45e1e]",
+    link: "/records",
   },
   {
     type: "testimonial",
@@ -62,6 +65,7 @@ const services = [
     desc: "Track vitals in real-time with your doctor present online.",
     stat: "Real-time",
     bg: "bg-gradient-to-br from-[#2563eb] to-[#1440a8]",
+    link: "/dashboard",
   },
 ];
 
@@ -77,7 +81,7 @@ const StartChip = ({ label }) => (
 );
 
 // 3. Cards
-const ServiceCard = ({ item }) => (
+const ServiceCard = ({ item, navigate }) => (
   <div
     className={`relative h-[360px] rounded-[2.5rem] p-8 flex flex-col justify-between overflow-hidden ${item.bg} group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500`}
   >
@@ -97,7 +101,7 @@ const ServiceCard = ({ item }) => (
     </div>
     <div className="flex items-center justify-between z-10">
       <StartChip label={item.stat} />
-      <div className="w-12 h-12 rounded-full bg-clinic-yellow flex items-center justify-center text-clinic-green shadow-lg group-hover:scale-110 transition-transform">
+      <div onClick={()=>{if(item.link) navigate(item.link)}} className="w-12 h-12 rounded-full bg-clinic-yellow flex items-center justify-center text-clinic-green shadow-lg group-hover:scale-110 transition-transform">
         <ArrowRight size={20} />
       </div>
     </div>
@@ -161,6 +165,7 @@ const cardVariants = {
 
 // 4. Main Component
 const BodyPage = () => {
+  const navigate = useNavigate()
   return (
     <div className="w-full py-20 bg-white overflow-hidden">
       
@@ -221,7 +226,7 @@ const BodyPage = () => {
                 className="h-full"
               >
                 {item.type === "service" ? (
-                  <ServiceCard item={item} />
+                  <ServiceCard item={item} navigate={navigate} />
                 ) : (
                   <TestimonialCard item={item} />
                 )}
@@ -236,6 +241,7 @@ const BodyPage = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
+              onClick={()=>navigate("/about")}
               className="h-[360px] rounded-[2.5rem] bg-[#053b32] p-8 flex flex-col justify-between group cursor-pointer hover:bg-black transition-colors duration-500 shadow-xl"
             >
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-[#dfff4f] border border-white/10">
