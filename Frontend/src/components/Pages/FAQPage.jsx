@@ -48,9 +48,7 @@ const FAQPage = () => {
     >
       {/* 2-Column Layout */}
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24">
-        {/* ============================== */}
         {/* LEFT COLUMN: Header & Support Card */}
-        {/* ============================== */}
         <div className="lg:w-1/3 flex flex-col pt-4">
           {/* Small Top Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-clinic-green/5 border border-clinic-green/10 mb-6 w-fit">
@@ -71,10 +69,7 @@ const FAQPage = () => {
             billing, and patient portals.
           </p>
 
-          {/* =========================================
-              THE FIX: "Still have questions?" Card
-              Ye us khali space ko beautifully bhar dega!
-              ========================================= */}
+          {/* THE FIX: "Still have questions?"*/}
           <div className="bg-white p-8 rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative overflow-hidden group">
             {/* Soft decorative glow inside card */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-clinic-yellow/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -117,9 +112,7 @@ const FAQPage = () => {
           </div>
         </div>
 
-        {/* ============================== */}
         {/* RIGHT COLUMN: The Accordion    */}
-        {/* ============================== */}
         <div className="lg:w-2/3 flex flex-col gap-4">
           {faqs.map((faq, index) => {
             const isActive = openIndex === index;

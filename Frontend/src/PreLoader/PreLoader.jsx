@@ -54,9 +54,7 @@ const PreLoader = ({ onComplete }) => {
         0.3
       );
 
-      // 3. Main headline — staggered slide-up from overflow:hidden parent
-      //    overflow:hidden on the wrapper clips the translateY so text
-      //    appears to emerge from behind a mask — classic editorial reveal
+      // 3. Main headline 
       tl.fromTo(
         [text1Ref.current, text2Ref.current],
         { y: "110%", skewY: 4 },
@@ -78,12 +76,12 @@ const PreLoader = ({ onComplete }) => {
         0.9
       );
 
-      // 5. Progress bar — scaleX trick (origin-left required on the div)
+      // 5. Progress bar 
       tl.fromTo(
         progressRef.current,
         { scaleX: 0 },
         { scaleX: 1, duration: 2.2, ease: "expo.inOut" },
-        0.5  // starts early, runs in background
+        0.5  
       );
 
       // 6. Counter 0 → 100 in sync with progress bar
@@ -102,10 +100,10 @@ const PreLoader = ({ onComplete }) => {
       tl.to({}, { duration: 0.4 });
     }, loaderRef);
 
-    return () => ctx.revert(); // cleanup — no memory leaks
+    return () => ctx.revert(); // cleanup 
   }, []);
 
-  // Awwwards cubic-bezier — buttery premium exit feel
+  
   const cinEase = [0.76, 0, 0.24, 1];
 
   return (
@@ -121,7 +119,7 @@ const PreLoader = ({ onComplete }) => {
           className="fixed inset-0 z-[9999] flex flex-col justify-between
                      bg-[#021814] p-8 md:p-12 lg:p-16 overflow-hidden"
         >
-          {/* ── Subtle grid texture ───────────────────────────────── */}
+          {/* ── Subtle grid texture  */}
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.03]"
             style={{
@@ -131,13 +129,13 @@ const PreLoader = ({ onComplete }) => {
             }}
           />
 
-          {/* ── Corner brackets ───────────────────────────────────── */}
+          {/* ── Corner brackets */}
           <span className="pointer-events-none absolute top-5 left-5 w-4 h-4
                            border-t border-l border-[#1D9E75] opacity-40" />
           <span className="pointer-events-none absolute bottom-5 right-5 w-4 h-4
                            border-b border-r border-[#1D9E75] opacity-40" />
 
-          {/* ── Top bar ───────────────────────────────────────────── */}
+          {/* ── Top bar */}
           <div className="flex justify-between items-center relative z-10">
             <div className="flex items-center gap-2">
               {/* Pulse dot */}
@@ -157,7 +155,7 @@ const PreLoader = ({ onComplete }) => {
             </span>
           </div>
 
-          {/* ── Center — main typography ──────────────────────────── */}
+          {/* ── Center — main typography  */}
           <div className="flex flex-col justify-center flex-1 py-8 relative z-10">
             {/* Eyebrow */}
             <p
@@ -168,7 +166,7 @@ const PreLoader = ({ onComplete }) => {
               Premium Healthcare Platform
             </p>
 
-            {/* "ELEVATING" — overflow:hidden clips the slide-up */}
+            {/* "ELEVATING" — */}
             <div className="overflow-hidden">
               <h1
                 ref={text1Ref}
@@ -179,7 +177,7 @@ const PreLoader = ({ onComplete }) => {
               </h1>
             </div>
 
-            {/* "HEALTHCARE." — lime accent */}
+            {/* "HEALTHCARE." — */}
             <div className="overflow-hidden">
               <h1
                 ref={text2Ref}
@@ -199,7 +197,7 @@ const PreLoader = ({ onComplete }) => {
             </p>
           </div>
 
-          {/* ── Bottom — counter + progress ───────────────────────── */}
+          {/* ── Bottom — counter + progress */}
           <div className="flex flex-col gap-3 relative z-10">
             <div className="flex justify-between items-end">
               <span className="font-mono text-[10px] tracking-[0.2em]
@@ -214,7 +212,7 @@ const PreLoader = ({ onComplete }) => {
               </span>
             </div>
 
-            {/* Progress bar — origin-left so scaleX goes left→right */}
+            {/* Progress bar —  */}
             <div className="w-full h-[1.5px] bg-white/[0.06] overflow-hidden">
               <div
                 ref={progressRef}

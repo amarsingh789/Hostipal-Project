@@ -6,7 +6,11 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"; // Navigation added
 import toast from "react-hot-toast"; // Toast added
-import { loginStart, loginSuccess, loginFailure } from "@/Redux/Features/authentication/authSlice";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from "@/Redux/Features/authentication/authSlice";
 import {
   Form,
   FormControl,
@@ -32,7 +36,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // 2. React Hook Form Setup
   const form = useForm({
@@ -52,33 +56,36 @@ const LoginPage = () => {
     try {
       // API call (Credentials true for cookies if used later)
       const res = await axios.post("http://localhost:5000/api/login", values, {
-        withCredentials: true 
+        withCredentials: true,
       });
-      
+
       console.log("Login Success:", res.data);
-      
-      localStorage.setItem("ziva_token", res.data.accessToken)
-      dispatch(loginSuccess({
-        user: res.data.user,
-        token: res.data.accessToken
-      }))
+
+      localStorage.setItem("ziva_token", res.data.accessToken);
+      dispatch(
+        loginSuccess({
+          user: res.data.user,
+          token: res.data.accessToken,
+        }),
+      );
       // Success Toast
       toast.success("Login Successful! Welcome back.");
-      
-      // TODO: Redux mein token save karein (Next step)
-      
-      // Redirect to Dashboard or Home
-      setTimeout(() => navigate("/dashboard"), 1500); 
 
+      // TODO: Redux mein token save karein (Next step)
+
+      // Redirect to Dashboard or Home
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       console.error("Login Error:", error);
-      
-      const errorMessage = error.response?.data?.message || "Login failed. Please check your credentials.";
-      
-      dispatch(loginFailure(errorMessage))
+
+      const errorMessage =
+        error.response?.data?.message ||
+        "Login failed. Please check your credentials.";
+
+      dispatch(loginFailure(errorMessage));
       // Error Toast
       toast.error(errorMessage);
-      
+
       form.setError("root", {
         message: errorMessage,
       });
@@ -90,13 +97,10 @@ const LoginPage = () => {
   return (
     // Main Background - Mint gradient to light gray
     <div className="min-h-screen bg-gradient-to-br from-[#E6F4F1] via-gray-50 to-[#E6F4F1] flex items-center justify-center p-4 sm:p-8">
-      
       {/* Main Glassmorphism Card */}
       <div className="flex flex-col md:flex-row bg-white rounded-[2.5rem] shadow-2xl overflow-hidden max-w-6xl w-full min-h-[600px] border border-white/50 bg-opacity-90 backdrop-blur-xl">
-        
         {/* ================= LEFT SIDE (Branding) ================= */}
         <div className="hidden md:flex flex-col justify-between p-12 bg-[#053b32] text-[#E5E7EB] w-1/2 relative overflow-hidden">
-          
           {/* Subtle Background Accent */}
           <div className="absolute inset-0 opacity-5">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +115,10 @@ const LoginPage = () => {
           </div>
 
           <div className="relative z-10">
-            <Link to="/" className="text-2xl font-bold tracking-tight mb-16 flex items-center gap-2 text-[#dfff4f]">
+            <Link
+              to="/"
+              className="text-2xl font-bold tracking-tight mb-16 flex items-center gap-2 text-[#dfff4f]"
+            >
               Ziva Healthcare
             </Link>
           </div>
@@ -127,26 +134,38 @@ const LoginPage = () => {
           </div>
 
           <div className="relative z-10 flex space-x-6 text-sm text-gray-400">
-            <Link to="#" className="hover:text-[#dfff4f] transition">Terms</Link>
-            <Link to="#" className="hover:text-[#dfff4f] transition">Plans</Link>
-            <Link to="#" className="hover:text-[#dfff4f] transition">Contact Us</Link>
+            <Link to="#" className="hover:text-[#dfff4f] transition">
+              Terms
+            </Link>
+            <Link to="#" className="hover:text-[#dfff4f] transition">
+              Plans
+            </Link>
+            <Link to="#" className="hover:text-[#dfff4f] transition">
+              Contact Us
+            </Link>
           </div>
         </div>
 
         {/* ================= RIGHT SIDE (Form) ================= */}
         <div className="w-full md:w-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-center bg-white relative">
           <div className="md:hidden mb-6">
-            <h2 className="text-[#0F766E] font-bold text-xl">Ziva Healthcare</h2>
+            <h2 className="text-[#0F766E] font-bold text-xl">
+              Ziva Healthcare
+            </h2>
           </div>
           <div className="max-w-md w-full mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-[#053b32] mb-1 tracking-tight">
               Log In
             </h2>
-            <p className="text-sm md:text-base text-gray-500 mb-8">Access your health account.</p>
+            <p className="text-sm md:text-base text-gray-500 mb-8">
+              Access your health account.
+            </p>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
                 {/* Unified Input */}
                 <FormField
                   control={form.control}
@@ -154,7 +173,7 @@ const LoginPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-700 font-medium text-sm">
-                       Email, or Mobile No.
+                        Email, or Mobile No.
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -187,9 +206,23 @@ const LoginPage = () => {
                         <FormLabel className="text-gray-700 font-medium pb-0 text-sm">
                           Password
                         </FormLabel>
-                        <Link to="#" className="text-sm text-[#0F766E] hover:underline">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toast("Forgot Password feature coming soon!", {
+                              icon: "🚧",
+                              style: {
+                                borderRadius: "12px",
+                                background: "#021814",
+                                color: "#dfff4f",
+                              },
+                            });
+                          }}
+                          className="text-sm text-[#0F766E] hover:underline focus:outline-none"
+                        >
                           Forgot Password?
-                        </Link>
+                        </button>
                       </div>
                       <FormControl>
                         <div className="relative">
@@ -240,7 +273,6 @@ const LoginPage = () => {
                     Sign up here
                   </Link>
                 </p>
-
               </form>
             </Form>
           </div>

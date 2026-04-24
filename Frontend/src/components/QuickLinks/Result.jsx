@@ -12,38 +12,7 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import api from '../../utils/axiosInstance.js'
 
-// const vitalsHistory = [
-//   { month: "Jan", bpSys: 120, bpDia: 80, heartRate: 72, weight: 75 },
-//   { month: "Feb", bpSys: 118, bpDia: 78, heartRate: 75, weight: 74.5 },
-//   { month: "Mar", bpSys: 122, bpDia: 82, heartRate: 70, weight: 74 },
-//   { month: "Apr", bpSys: 115, bpDia: 75, heartRate: 68, weight: 73 },
-//   { month: "May", bpSys: 119, bpDia: 79, heartRate: 71, weight: 72.5 },
-//   { month: "Jun", bpSys: 118, bpDia: 76, heartRate: 73, weight: 72 }, // Current
-// ];
 
-// const labResults = [
-//   {
-//     id: 1,
-//     name: "Complete Blood Count (CBC)",
-//     date: "2026-06-15",
-//     status: "Normal",
-//     doctor: "Dr. Ananya Sharma",
-//   },
-//   {
-//     id: 2,
-//     name: "Lipid Profile",
-//     date: "2026-03-10",
-//     status: "Borderline",
-//     doctor: "Dr. Rohan Gupta",
-//   },
-//   {
-//     id: 3,
-//     name: "Thyroid Test",
-//     date: "2024-01-20",
-//     status: "Normal",
-//     doctor: "Dr. Meera Patel",
-//   },
-// ];
 
 const Result = () => {
   const navigate = useNavigate();
