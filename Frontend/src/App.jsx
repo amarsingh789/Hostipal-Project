@@ -34,7 +34,7 @@ const Result = lazy(() => import("./components/QuickLinks/Result"));
 const Records = lazy(() => import("./components/QuickLinks/Record"));
 const Telehealth = lazy(() => import("./components/QuickLinks/Telehealth"));
 import PreLoader from "./PreLoader/PreLoader";
-
+import NotFound from "./components/Pages/NotFound";
 import LocomotiveScroll from "locomotive-scroll";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 
@@ -271,6 +271,7 @@ const App = () => {
                       </div>
                     }
                   />
+                  <Route path="*" element={<NotFound/>}/>
                 </Routes>
               </Suspense>
             </div>
