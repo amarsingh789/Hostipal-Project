@@ -14,6 +14,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 const TIME_SLOTS = [
   { id: "t1", time: "09:00 AM", available: true },
@@ -48,7 +50,7 @@ const RescheduleModal = ({ isOpen, onClose, appointment, onSuccess }) => {
     try {
       const token = localStorage.getItem("ziva_token");
       await axios.put(
-        `http://localhost:5000/zivacare/reschedule/${appointment._id}`,
+        `${API_URL}/zivacare/reschedule/${appointment._id}`,
         {
           newDate: date,
           newTimeSlot: timeSlot,

@@ -4,6 +4,8 @@ import { MessageSquare, X, Send, Bot, Sparkles } from "lucide-react";
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
 import { animate } from "motion";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 const ZivaChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +37,7 @@ const ZivaChatbot = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/ai/ask",
+        `${API_URL}/api/ai/ask`,
         {
           message: userText,
         },

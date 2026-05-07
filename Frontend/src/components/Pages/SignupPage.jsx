@@ -19,6 +19,7 @@ import { Separator } from "../ui/separator";
 import { Eye, EyeOff, Loader2, User, Mail, Phone } from "lucide-react";
 import { loginSuccess } from "../../Redux/Features/authentication/authSlice.js";
 import { useDispatch } from "react-redux";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Schema
 const signupSchema = z.object({
@@ -78,7 +79,7 @@ const SignupPage = () => {
     console.log("Submitting Signup:", values);
     
     try {
-      const res = await axios.post('http://localhost:5000/api/register', values);
+      const res = await axios.post(`${API_URL}/api/register`, values);
       console.log("Signup Success:", res.data);
       
       dispatch(loginSuccess({

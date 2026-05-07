@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { loginSuccess } from "@/Redux/Features/authentication/authSlice";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const fmt = (d) =>
   d ? d.toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" }) : null;
@@ -133,7 +134,7 @@ const UserPage = () => {
     }
 
     try{
-      const res = await axios.put(`http://localhost:5000/api/update/${user._id}`, updateData, {
+      const res = await axios.put(`${API_URL}/api/update/${user._id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`
         }

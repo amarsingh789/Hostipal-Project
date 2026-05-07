@@ -16,6 +16,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // ── Mock Data ──────────────────────────────────────────────────
 const SPECIALTIES = [
@@ -130,7 +131,7 @@ export default function BookDoctor() {
       };
 
       const res = await axios.post(
-        "http://localhost:5000/zivacare/bookAppointment",
+        `${API_URL}/zivacare/bookAppointment`,
         appointmentData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

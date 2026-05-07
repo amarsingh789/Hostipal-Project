@@ -4,8 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom"; // Navigation added
-import toast from "react-hot-toast"; // Toast added
+import { Link, useNavigate } from "react-router-dom"; 
+import toast from "react-hot-toast"; 
+const API_URL = import.meta.env.VITE_API_URL;
 import {
   loginStart,
   loginSuccess,
@@ -24,9 +25,7 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Eye, EyeOff, Loader2, User } from "lucide-react";
 
-// ==========================================
 // 1. Zod Schema - Validation
-// ==========================================
 const formSchema = z.object({
   email: z.string().min(3, "Email, or Mobile No. is required."),
   password: z.string().min(1, "Password is required."),
@@ -47,15 +46,13 @@ const LoginPage = () => {
     },
   });
 
-  // ==========================================
   // 3. API Call: Login Handler
-  // ==========================================
   const onSubmit = async (values) => {
     setLoading(true);
     console.log("Submitting Login:", values);
     try {
       // API call (Credentials true for cookies if used later)
-      const res = await axios.post("http://localhost:5000/api/login", values, {
+      const res = await axios.post(`${API_URL}/api/login`, values, {
         withCredentials: true,
       });
 
