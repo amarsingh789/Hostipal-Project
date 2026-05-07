@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const API_URL = import.meta.env.VITE_API_URL;
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -12,7 +12,7 @@ const processQueue = (error, token = null) => {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: API_URL,
   withCredentials: true,
 });
 
@@ -45,7 +45,7 @@ api.interceptors.response.use(
 
       return new Promise((resolve, reject) => {
         // 🚀 Asli Refresh Call (Backend route check kar lena /api/refresh-token hai ya /zivacare/...)
-        axios.get('http://localhost:5000/api/refresh-token', { withCredentials: true })
+        axios.get(`${API_URL}/api/refresh-token`, { withCredentials: true })
           .then(({ data }) => {
             localStorage.setItem('ziva_token', data.accessToken);
             api.defaults.headers.common['Authorization'] = 'Bearer ' + data.accessToken;
