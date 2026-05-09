@@ -17,9 +17,10 @@ app.use(cookieParser())
 
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Frontend ka URL
+    origin: ['http://localhost:5173', 
+    "https://ziva-care.vercel.app/"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true // Agar cookies use karni hain toh zaroori hai
+    credentials: true 
 }))
 app.use('/api', authRoute)
 app.use('/patient', patientRoute)
